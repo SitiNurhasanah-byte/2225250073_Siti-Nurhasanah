@@ -151,7 +151,8 @@ Prioritas: **M** = Must (MVP), **S** = Should, **C** = Could, **W** = Won't (v1)
 
 ### F12. Dasbor Guru & Sinkronisasi Cloud — **W** (v2)
 ### F13. Gamifikasi kompetitif (leaderboard) — **W** (bertentangan dengan prinsip ketenangan & dapat menambah EL)
-### F14. Lencana/penanda capaian sederhana (non-kompetitif) — **C**
+### F14. Penanda capaian "pisang terkumpul" (non-kompetitif) — **C**
+- Satu ikon pisang per modul selesai, hanya terlihat oleh siswa sendiri (lihat `docs/04` §7.2a).
 
 ## 6. User Stories Utama
 

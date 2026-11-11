@@ -1,0 +1,74 @@
+{
+  "id": "BS-2",
+  "group": "learning",
+  "title": "Biaya Fotokopi",
+  "indicator": "formulate",
+  "objectives": ["TP5", "TP6", "TP8"],
+  "context": "Sebuah tempat fotokopi mengenakan biaya tetap untuk administrasi dan biaya yang sama untuk setiap lembar yang difotokopi. Diketahui bahwa biaya untuk 2 lembar adalah Rp5.000, sedangkan biaya untuk 5 lembar adalah Rp8.000. Misalkan x menyatakan banyak lembar fotokopi dan y menyatakan total biaya. Susunlah persamaan garis lurus yang menggambarkan hubungan banyak lembar dan total biaya tersebut. Kemudian, tentukan biaya untuk memfotokopi 8 lembar.",
+  "given": ["2 lembar → Rp5.000, ditulis (2, 5.000)", "5 lembar → Rp8.000, ditulis (5, 8.000)", "x = banyak lembar, y = total biaya"],
+  "asked": ["Persamaan garis", "Biaya untuk 8 lembar"],
+  "graph": {
+    "x": [0, 10], "y": [0, 14000], "xStep": 1, "yStep": 2000,
+    "points": [{ "x": 2, "y": 5000, "label": "(2, 5.000)" }, { "x": 5, "y": 8000, "label": "(5, 8.000)" }],
+    "lines": [{ "m": "1000", "c": "3000" }],
+    "triangle": { "x0": 2, "dx": 3 }
+  },
+  "steps": [
+    {
+      "stage": 1, "score": 1, "label": "Mengidentifikasi informasi", "kind": "choice",
+      "prompt": "Pasangan nilai (x, y) mana yang diketahui dari soal?",
+      "options": ["(2, 5.000) dan (5, 8.000)", "(5.000, 2) dan (8.000, 5)", "(2, 5) dan (5, 8)"],
+      "answer": 0,
+      "why": "x adalah banyak lembar dan y adalah biaya, jadi titiknya (2, 5.000) dan (5, 8.000).",
+      "misconceptions": [{ "value": "1", "code": "M-KOOR-01" }]
+    },
+    {
+      "stage": 2, "score": 1, "label": "Menentukan gradien", "kind": "number",
+      "prompt": "Hitung gradien: $m = \\dfrac{8.000 - 5.000}{5 - 2}$", "answer": "1000",
+      "why": "$m = \\dfrac{3.000}{3} = 1.000$. Biaya bertambah Rp1.000 untuk setiap lembar.",
+      "misconceptions": [
+        { "value": "2500", "code": "M-GRAD-06" },
+        { "value": "1600", "code": "M-GRAD-06" },
+        { "value": "1/1000", "code": "M-GRAD-01" }
+      ]
+    },
+    {
+      "stage": 3, "score": 1, "label": "Menentukan konstanta", "kind": "number",
+      "prompt": "Masukkan titik (2, 5.000) ke $y = mx + c$: $5.000 = 1.000(2) + c$. Berapa c?", "answer": "3000",
+      "why": "$5.000 = 2.000 + c$, jadi $c = 5.000 - 2.000 = 3.000$. Ini biaya tetap administrasi.",
+      "misconceptions": [{ "value": "5000", "code": "M-MODEL-02" }, { "value": "7000", "code": "M-ALJ-01" }]
+    },
+    {
+      "stage": 4, "score": 1, "label": "Menyusun model", "kind": "equation",
+      "prompt": "Tuliskan persamaan garisnya dalam bentuk $y = mx + c$.", "answer": "y = 1000x + 3000",
+      "why": "Gradien 1.000 dan konstanta 3.000, jadi $y = 1.000x + 3.000$.",
+      "misconceptions": [{ "value": "y = 3000x + 1000", "code": "M-MODEL-01" }, { "value": "y = 1000x + 5000", "code": "M-MODEL-02" }]
+    },
+    {
+      "stage": 5, "score": 1, "label": "Biaya 8 lembar", "kind": "number",
+      "prompt": "Hitung biaya 8 lembar: $y = 1.000(8) + 3.000$", "prefix": "Rp", "answer": "11000",
+      "why": "$1.000 \\times 8 = 8.000$, lalu $8.000 + 3.000 = 11.000$.",
+      "misconceptions": [{ "value": "8000", "code": "M-OP-02" }, { "value": "800", "code": "M-OP-05" }]
+    },
+    {
+      "stage": 6, "score": 1, "label": "Menyimpulkan", "kind": "choice",
+      "prompt": "Pilih kesimpulan yang tepat.",
+      "options": [
+        "Persamaannya $y = 1.000x + 3.000$; biaya 8 lembar Rp11.000",
+        "Persamaannya $y = 1.000x + 5.000$; biaya 8 lembar Rp13.000",
+        "Persamaannya $y = 3.000x + 1.000$; biaya 8 lembar Rp25.000"
+      ],
+      "answer": 0,
+      "why": "Kesimpulan harus menjawab kedua pertanyaan: persamaan dan biaya 8 lembar.",
+      "misconceptions": [{ "value": "1", "code": "M-MODEL-02" }, { "value": "2", "code": "M-MODEL-01" }]
+    }
+  ],
+  "hints": [
+    "Gradien = selisih biaya ÷ selisih banyak lembar.",
+    "$m = 3.000 \\div 3$. Lalu masukkan titik (2, 5.000) ke $y = mx + c$ untuk mencari c.",
+    "Contoh mirip: (1, 4.000) dan (3, 8.000) → $m = 4.000 \\div 2 = 2.000$, lalu $4.000 = 2.000(1) + c$ → $c = 2.000$."
+  ],
+  "explanation": "$m = 1.000$, $c = 3.000$, jadi $y = 1.000x + 3.000$. Biaya 8 lembar Rp11.000.",
+  "sameConceptAs": ["BS-3"],
+  "sameConceptNote": "Konsep sama dengan soal Persamaan Garis pada Peta: dua titik → gradien → c → persamaan."
+}

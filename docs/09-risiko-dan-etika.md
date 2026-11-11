@@ -13,6 +13,8 @@
 | R07 | Data penelitian hilang di perangkat siswa | Sedang | Tinggi | Ekspor data di akhir setiap sesi uji coba; siapkan HP cadangan |
 | R08 | Ketergantungan berlebih pada AI coding assistant tanpa memahami kode | Sedang | Sedang | Baca & uji setiap kode; logika matematika wajib unit test; catat keputusan |
 | R09 | Video melanggar hak cipta | Rendah | Sedang | Buat video sendiri atau minta izin tertulis |
+| R11 | Memakai gambar karakter berhak cipta (mis. Minions) sebagai dekorasi | Sedang | Tinggi | Maskot orisinal "Gari" (`docs/04` §7.1); hanya aset buatan sendiri atau berlisensi bebas |
+| R12 | Dekorasi berlebihan menambah beban ekstrinsik | Sedang | Sedang | Batasan per layar (`docs/04` §7.3); evaluasi saat uji one-to-one |
 | R10 | Siswa menebak tanpa berpikir | Sedang | Sedang | Petunjuk bertingkat, tidak menampilkan kunci langsung, prompt self-explanation |
 
 ## 2. Privasi Data Anak

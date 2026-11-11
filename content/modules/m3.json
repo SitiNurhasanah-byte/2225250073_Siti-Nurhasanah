@@ -1,0 +1,40 @@
+{
+  "id": "M3",
+  "order": 3,
+  "title": "Makna Gradien & Konstanta",
+  "summary": "Arti m dan c pada y = mx + c",
+  "objectives": ["TP4", "TP7"],
+  "cards": [
+    {
+      "title": "Apa arti angka 2?",
+      "body": "Pada $y = 2x + 1$, angka 2 adalah [[gradien]]. Artinya: setiap x bertambah 1, y bertambah 2.",
+      "graph": { "x": [-3, 4], "y": [-3, 8], "lines": [{ "m": "2", "c": "1" }], "triangle": { "x0": 0, "dx": 1 } }
+    },
+    {
+      "title": "Apa arti angka 1?",
+      "body": "Angka 1 adalah [[konstanta]]. Garis memotong sumbu-y di titik $(0, 1)$.",
+      "graph": { "x": [-3, 4], "y": [-3, 8], "lines": [{ "m": "2", "c": "1" }], "points": [{ "x": 0, "y": 1, "label": "(0, 1)" }] }
+    },
+    {
+      "title": "Gradien negatif",
+      "body": "Jika gradien negatif, garis turun dari kiri ke kanan. Pada $y = -x + 1$, setiap x naik 1, y turun 1.",
+      "graph": { "x": [-3, 4], "y": [-4, 5], "lines": [{ "m": "-1", "c": "1" }], "triangle": { "x0": 0, "dx": 1 } }
+    },
+    {
+      "title": "Gradien dalam cerita",
+      "body": "Pada tarif parkir $y = 3.000x + 2.000$, gradien 3.000 adalah biaya setiap jam. Konstanta 2.000 adalah biaya awal saat $x = 0$."
+    },
+    {
+      "title": "Sejajar dan tegak lurus",
+      "body": "Dua garis [[sejajar]] jika gradiennya sama. Dua garis [[tegak lurus]] jika hasil kali gradiennya $-1$.",
+      "graph": { "x": [-4, 4], "y": [-5, 6], "lines": [{ "m": "2", "c": "1", "label": "y = 2x + 1" }, { "m": "2", "c": "-3", "label": "y = 2x − 3", "dashed": true }] }
+    }
+  ],
+  "example": { "itemId": "LT-M3-1" },
+  "practice": [{ "itemId": "LT-M3-2", "prefill": 0 }],
+  "recap": [
+    "Gradien m: perubahan y setiap x naik 1 (kemiringan).",
+    "Konstanta c: titik potong sumbu-y di (0, c).",
+    "Sejajar: m sama. Tegak lurus: m₁ × m₂ = −1."
+  ]
+}

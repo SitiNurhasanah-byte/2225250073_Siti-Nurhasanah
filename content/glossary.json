@@ -1,0 +1,18 @@
+{
+  "sumbu-x": "Garis bilangan mendatar pada bidang Cartesius. Nilai x bertambah ke kanan.",
+  "sumbu-y": "Garis bilangan tegak pada bidang Cartesius. Nilai y bertambah ke atas.",
+  "absis": "Angka pertama pada titik (x, y). Menunjukkan geser ke kanan (positif) atau ke kiri (negatif).",
+  "ordinat": "Angka kedua pada titik (x, y). Menunjukkan geser ke atas (positif) atau ke bawah (negatif).",
+  "koordinat": "Pasangan angka (x, y) yang menunjukkan letak sebuah titik.",
+  "kuadran": "Empat daerah pada bidang Cartesius yang dibatasi sumbu-x dan sumbu-y, diberi nomor I sampai IV berlawanan arah jarum jam.",
+  "persamaan garis": "Aturan yang menghubungkan x dan y, misalnya y = 2x − 1. Semua titik yang memenuhinya membentuk garis lurus.",
+  "substitusi": "Mengganti huruf (variabel) dengan sebuah angka, lalu menghitung hasilnya.",
+  "variabel": "Huruf yang mewakili nilai yang bisa berubah, misalnya x dan y.",
+  "konstanta": "Angka yang berdiri sendiri pada y = mx + c, yaitu c. Garis memotong sumbu-y di titik (0, c).",
+  "koefisien": "Angka yang dikalikan dengan variabel, misalnya 2 pada 2x.",
+  "gradien": "Kemiringan garis: berapa y berubah setiap x bertambah 1. Dihitung dengan selisih y ÷ selisih x.",
+  "titik potong": "Titik tempat garis memotong sumbu atau garis lain.",
+  "sejajar": "Dua garis yang tidak pernah berpotongan. Gradiennya sama.",
+  "tegak lurus": "Dua garis yang berpotongan membentuk sudut siku-siku. Hasil kali gradiennya −1.",
+  "model matematika": "Persamaan yang menggambarkan situasi nyata, misalnya y = 2.000x + 5.000 untuk biaya sewa."
+}

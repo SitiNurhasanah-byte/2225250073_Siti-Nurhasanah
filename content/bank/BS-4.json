@@ -1,0 +1,71 @@
+{
+  "id": "BS-4",
+  "group": "learning",
+  "title": "Tabungan untuk Membeli Buku",
+  "indicator": "interpret",
+  "objectives": ["TP2", "TP8"],
+  "context": "Dita memiliki tabungan awal Rp20.000. Setiap hari ia menambahkan tabungannya sebesar Rp5.000. Hubungan jumlah tabungan (y) setelah x hari dinyatakan dengan persamaan $y = 5.000x + 20.000$. Dita ingin membeli buku seharga Rp60.000. Seorang teman menyatakan bahwa Dita sudah dapat membeli buku tersebut setelah 7 hari karena tabungannya telah mencapai Rp60.000. Apakah pernyataan teman Dita benar? Periksa dengan perhitungan dan jelaskan berapa hari paling sedikit yang dibutuhkan Dita untuk membeli buku tersebut.",
+  "given": ["Tabungan awal Rp20.000", "Bertambah Rp5.000 setiap hari", "$y = 5.000x + 20.000$", "Harga buku Rp60.000"],
+  "asked": ["Benarkah tabungan sudah cukup setelah 7 hari?", "Paling sedikit berapa hari?"],
+  "graph": {
+    "x": [0, 10], "y": [0, 70000], "xStep": 1, "yStep": 10000,
+    "lines": [
+      { "m": "5000", "c": "20000", "label": "tabungan" },
+      { "m": "0", "c": "60000", "label": "harga buku", "dashed": true }
+    ]
+  },
+  "steps": [
+    {
+      "stage": 1, "score": 1, "label": "Mengidentifikasi informasi", "kind": "number",
+      "prompt": "Berapa tabungan **awal** Dita?", "prefix": "Rp", "answer": "20000",
+      "why": "Tabungan awal Rp20.000 adalah konstanta c. Rp5.000 per hari adalah gradien m.",
+      "misconceptions": [{ "value": "5000", "code": "M-MODEL-01" }]
+    },
+    {
+      "stage": 2, "score": 1, "label": "Tabungan setelah 7 hari", "kind": "number",
+      "prompt": "Hitung $y = 5.000(7) + 20.000$.", "prefix": "Rp", "answer": "55000",
+      "why": "$5.000 \\times 7 = 35.000$, lalu $35.000 + 20.000 = 55.000$.",
+      "misconceptions": [{ "value": "35000", "code": "M-OP-02" }, { "value": "3500", "code": "M-OP-05" }]
+    },
+    {
+      "stage": 3, "score": 1, "label": "Membandingkan", "kind": "choice",
+      "prompt": "Bandingkan tabungan setelah 7 hari dengan harga buku Rp60.000.",
+      "options": ["Rp55.000 < Rp60.000, belum cukup", "Rp55.000 > Rp60.000, sudah cukup", "Rp55.000 = Rp60.000, pas"],
+      "answer": 0,
+      "why": "Rp55.000 masih kurang Rp5.000 dari harga buku.",
+      "misconceptions": [{ "value": "1", "code": "M-INTERP-02" }]
+    },
+    {
+      "stage": 4, "score": 1, "label": "Menentukan waktu", "kind": "number",
+      "prompt": "Selesaikan $5.000x + 20.000 = 60.000$. Berapa x?", "suffix": "hari", "answer": "8",
+      "why": "Kurangi 20.000: $5.000x = 40.000$. Bagi 5.000: $x = 8$.",
+      "misconceptions": [{ "value": "12", "code": "M-INTERP-01" }, { "value": "16", "code": "M-ALJ-01" }]
+    },
+    {
+      "stage": 5, "score": 1, "label": "Menilai pernyataan", "kind": "choice",
+      "prompt": "Apakah pernyataan teman Dita benar?",
+      "options": [
+        "Tidak benar, setelah 7 hari tabungan baru Rp55.000 (kurang Rp5.000)",
+        "Benar, karena 7 hari sudah cukup lama",
+        "Benar, karena $60.000 \\div 5.000 = 12$ dan 12 > 7"
+      ],
+      "answer": 0,
+      "why": "Pernyataan dinilai dengan perhitungan: Rp55.000 belum mencapai Rp60.000.",
+      "misconceptions": [{ "value": "1", "code": "M-INTERP-02" }, { "value": "2", "code": "M-INTERP-01" }]
+    },
+    {
+      "stage": 6, "score": 1, "label": "Menyimpulkan", "kind": "number",
+      "prompt": "Jadi, paling sedikit berapa hari Dita harus menabung?", "suffix": "hari", "answer": "8",
+      "why": "Pada hari ke-8 tabungan tepat Rp60.000, jadi Dita bisa membeli buku.",
+      "misconceptions": [{ "value": "7", "code": "M-INTERP-02" }, { "value": "12", "code": "M-INTERP-01" }]
+    }
+  ],
+  "hints": [
+    "Ganti x dengan 7 pada persamaan untuk memeriksa pernyataan teman Dita.",
+    "Untuk mencari hari minimum, tulis $5.000x + 20.000 = 60.000$, lalu kurangi kedua ruas dengan 20.000.",
+    "Contoh mirip: $y = 2.000x + 10.000$, target 20.000 → $2.000x = 10.000$ → $x = 5$."
+  ],
+  "explanation": "Setelah 7 hari tabungan Rp55.000, belum cukup. $5.000x + 20.000 = 60.000$ → $x = 8$. Dita butuh paling sedikit 8 hari.",
+  "sameConceptAs": ["BS-1"],
+  "sameConceptNote": "Konsep sama dengan soal Sewa Sepeda: nilai awal (c) + laju per satuan (m)."
+}

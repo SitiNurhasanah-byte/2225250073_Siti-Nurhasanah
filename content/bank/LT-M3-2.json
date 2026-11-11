@@ -1,0 +1,79 @@
+{
+  "id": "LT-M3-2",
+  "group": "learning",
+  "title": "Membandingkan Tiga Garis",
+  "indicator": "reason",
+  "objectives": ["TP4", "TP7"],
+  "draft": true,
+  "context": "Diketahui tiga garis: g: $y = 2x + 1$, h: $y = 2x - 3$, dan k: $y = -x + 1$.",
+  "given": ["g: $y = 2x + 1$", "h: $y = 2x - 3$", "k: $y = -x + 1$"],
+  "asked": ["Gradien dan titik potong sumbu-y", "Garis sejajar, turun, dan tegak lurus"],
+  "graph": {
+    "x": [-4, 4], "y": [-5, 6], "xStep": 1, "yStep": 1,
+    "lines": [
+      { "m": "2", "c": "1", "label": "g" },
+      { "m": "2", "c": "-3", "label": "h", "dashed": true },
+      { "m": "-1", "c": "1", "label": "k" }
+    ]
+  },
+  "steps": [
+    {
+      "stage": 1, "score": 1, "label": "Gradien garis k", "kind": "number",
+      "prompt": "Berapa gradien garis k: $y = -x + 1$?", "answer": "-1",
+      "why": "$-x$ sama dengan $-1 \\cdot x$, jadi gradiennya −1. Gradien g dan h sama-sama 2.",
+      "misconceptions": [{ "value": "1", "code": "M-GRAD-02" }]
+    },
+    {
+      "stage": 2, "score": 1, "label": "Garis sejajar", "kind": "choice",
+      "prompt": "Garis mana yang sejajar?",
+      "options": ["g dan h, karena gradiennya sama (2)", "g dan k, karena konstantanya sama (1)", "h dan k"],
+      "answer": 0,
+      "why": "Garis sejajar memiliki gradien yang sama.",
+      "misconceptions": [{ "value": "1", "code": "M-GRAD-02" }, { "value": "2", "code": "M-PERS-02" }]
+    },
+    {
+      "stage": 3, "score": 1, "label": "Garis turun", "kind": "choice",
+      "prompt": "Garis mana yang turun dari kiri ke kanan?",
+      "options": ["k", "g", "h"],
+      "answer": 0,
+      "why": "Gradien k negatif (−1), jadi garis k turun.",
+      "misconceptions": [{ "value": "1", "code": "M-GRAD-05" }, { "value": "2", "code": "M-GRAD-05" }]
+    },
+    {
+      "stage": 4, "score": 1, "label": "Titik potong sumbu-y", "kind": "choice",
+      "prompt": "Dua garis mana yang memotong sumbu-y di titik yang sama?",
+      "options": ["g dan k, di (0, 1)", "g dan h, di (0, 1)", "h dan k, di (0, −3)"],
+      "answer": 0,
+      "why": "Konstanta g dan k sama-sama 1, jadi keduanya melalui (0, 1).",
+      "misconceptions": [{ "value": "1", "code": "M-GRAF-01" }, { "value": "2", "code": "M-GRAF-01" }]
+    },
+    {
+      "stage": 5, "score": 1, "label": "Tegak lurus?", "kind": "choice",
+      "prompt": "Apakah garis g tegak lurus garis k?",
+      "options": ["Tidak, karena $2 \\times (-1) = -2$, bukan −1", "Ya, karena tanda gradiennya berlawanan", "Ya, karena keduanya melalui (0, 1)"],
+      "answer": 0,
+      "why": "Dua garis tegak lurus jika hasil kali gradiennya −1. Di sini hasilnya −2.",
+      "misconceptions": [{ "value": "1", "code": "M-PERS-02" }, { "value": "2", "code": "M-GRAF-01" }]
+    },
+    {
+      "stage": 6, "score": 1, "label": "Menyimpulkan", "kind": "choice",
+      "selfExplain": true,
+      "prompt": "Pilih kesimpulan yang tepat.",
+      "options": [
+        "Gradien menentukan kemiringan garis; konstanta menentukan titik potong sumbu-y",
+        "Konstanta menentukan kemiringan garis",
+        "Gradien menentukan titik potong sumbu-y"
+      ],
+      "answer": 0,
+      "why": "Garis bergradien sama tampak sejajar; garis berkonstanta sama melalui titik yang sama di sumbu-y.",
+      "misconceptions": [{ "value": "1", "code": "M-GRAD-02" }, { "value": "2", "code": "M-GRAD-02" }]
+    }
+  ],
+  "hints": [
+    "Tulis m dan c untuk setiap garis dulu.",
+    "Sejajar: m sama. Tegak lurus: $m_1 \\times m_2 = -1$. Turun: m negatif.",
+    "Contoh: $y = 3x + 2$ dan $y = 3x - 5$ sejajar karena gradiennya sama-sama 3."
+  ],
+  "explanation": "g (m = 2) sejajar h (m = 2). k (m = −1) turun. g dan k melalui (0, 1), tetapi tidak tegak lurus karena $2 \\times (-1) = -2$.",
+  "sameConceptAs": []
+}

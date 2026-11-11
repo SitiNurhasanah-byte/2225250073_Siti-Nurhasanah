@@ -1,0 +1,29 @@
+{
+  "id": "M5",
+  "order": 5,
+  "title": "Menentukan Persamaan Garis",
+  "summary": "Dari dua titik ke y = mx + c",
+  "objectives": ["TP5", "TP6"],
+  "cards": [
+    {
+      "title": "Dua titik → persamaan",
+      "body": "Langkah 1: hitung gradien m. Langkah 2: masukkan satu titik ke $y = mx + c$ untuk mencari c. Langkah 3: tulis $y = mx + c$."
+    },
+    {
+      "title": "Mencari c",
+      "body": "Untuk $m = 2$ dan titik A(2, 3): $3 = 2(2) + c$, jadi $3 = 4 + c$. Kurangi kedua ruas dengan 4: $c = -1$."
+    },
+    {
+      "title": "Cek jawabanmu",
+      "body": "Masukkan titik lain ke persamaan. Untuk B(4, 7): $2(4) - 1 = 7$. Cocok, jadi $y = 2x - 1$ benar.",
+      "graph": { "x": [-1, 6], "y": [-2, 10], "points": [{ "x": 2, "y": 3, "label": "A" }, { "x": 4, "y": 7, "label": "B" }], "lines": [{ "m": "2", "c": "-1" }] }
+    }
+  ],
+  "example": { "itemId": "BS-3" },
+  "practice": [{ "itemId": "BS-2", "prefill": 2 }],
+  "recap": [
+    "Hitung m dulu, lalu cari c dengan memasukkan satu titik.",
+    "Cek persamaan dengan titik yang lain.",
+    "Soal cerita dengan dua data juga diselesaikan dengan cara yang sama."
+  ]
+}

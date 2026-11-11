@@ -1,0 +1,70 @@
+{
+  "id": "BS-3",
+  "group": "learning",
+  "title": "Menentukan Persamaan Garis pada Peta",
+  "indicator": "employ",
+  "objectives": ["TP2", "TP5", "TP6"],
+  "context": "Pada sebuah bidang koordinat Cartesius, terdapat dua titik yang dilalui sebuah jalan lurus, yaitu titik A(2, 3) dan titik B(4, 7). Tentukan: (a) gradien garis yang melalui kedua titik tersebut; (b) persamaan garisnya dalam bentuk $y = mx + c$; dan (c) nilai y ketika x = 5. Tunjukkan langkah perhitungan Anda.",
+  "given": ["Titik A(2, 3)", "Titik B(4, 7)"],
+  "asked": ["Gradien garis", "Persamaan garis $y = mx + c$", "Nilai y saat x = 5"],
+  "graph": {
+    "x": [-1, 6], "y": [-2, 10], "xStep": 1, "yStep": 1,
+    "points": [{ "x": 2, "y": 3, "label": "A" }, { "x": 4, "y": 7, "label": "B" }],
+    "lines": [{ "m": "2", "c": "-1" }],
+    "triangle": { "x0": 2, "dx": 2 }
+  },
+  "steps": [
+    {
+      "stage": 1, "score": 1, "label": "Menuliskan informasi", "kind": "choice",
+      "prompt": "Titik mana yang diketahui?",
+      "options": ["A(2, 3) dan B(4, 7)", "A(3, 2) dan B(7, 4)", "A(2, 4) dan B(3, 7)"],
+      "answer": 0,
+      "why": "Diketahui A(2, 3) dan B(4, 7). Ditanya gradien, persamaan, dan y saat x = 5.",
+      "misconceptions": [{ "value": "1", "code": "M-KOOR-01" }]
+    },
+    {
+      "stage": 2, "score": 1, "label": "Menghitung gradien", "kind": "number",
+      "prompt": "$m = \\dfrac{y_2 - y_1}{x_2 - x_1} = \\dfrac{7 - 3}{4 - 2}$. Berapa m?", "answer": "2",
+      "why": "Selisih y = 4, selisih x = 2, jadi $m = \\dfrac{4}{2} = 2$. Maju 2, naik 4.",
+      "misconceptions": [{ "value": "1/2", "code": "M-GRAD-01" }, { "value": "4", "code": "M-GRAD-06" }]
+    },
+    {
+      "stage": 3, "score": 1, "label": "Menentukan c", "kind": "number",
+      "prompt": "Masukkan A(2, 3) ke $y = mx + c$: $3 = 2(2) + c$. Berapa c?", "answer": "-1",
+      "why": "$3 = 4 + c$. Kurangi kedua ruas dengan 4: $c = 3 - 4 = -1$.",
+      "misconceptions": [{ "value": "7", "code": "M-ALJ-01" }, { "value": "1", "code": "M-ALJ-01" }]
+    },
+    {
+      "stage": 4, "score": 1, "label": "Menuliskan persamaan", "kind": "equation",
+      "prompt": "Tuliskan persamaan garisnya.", "answer": "y = 2x - 1",
+      "why": "m = 2 dan c = −1, jadi $y = 2x - 1$. Cek dengan B: $2(4) - 1 = 7$. Cocok!",
+      "misconceptions": [{ "value": "y = 2x + 1", "code": "M-ALJ-01" }, { "value": "y = 1/2x + 2", "code": "M-GRAD-01" }]
+    },
+    {
+      "stage": 5, "score": 1, "label": "Nilai y saat x = 5", "kind": "number",
+      "prompt": "Hitung $y = 2(5) - 1$.", "answer": "9",
+      "why": "Kalikan dulu: $2 \\times 5 = 10$, lalu kurangi: $10 - 1 = 9$.",
+      "misconceptions": [{ "value": "8", "code": "M-OP-01" }, { "value": "10", "code": "M-OP-02" }]
+    },
+    {
+      "stage": 6, "score": 1, "label": "Menyimpulkan", "kind": "choice",
+      "prompt": "Pilih kesimpulan yang tepat.",
+      "options": [
+        "m = 2; $y = 2x - 1$; y = 9 saat x = 5",
+        "m = 1/2; $y = \\tfrac{1}{2}x + 2$; y = 4,5 saat x = 5",
+        "m = 2; $y = 2x + 1$; y = 11 saat x = 5"
+      ],
+      "answer": 0,
+      "why": "Ketiga pertanyaan terjawab: gradien 2, persamaan $y = 2x - 1$, dan y = 9.",
+      "misconceptions": [{ "value": "1", "code": "M-GRAD-01" }, { "value": "2", "code": "M-ALJ-01" }]
+    }
+  ],
+  "hints": [
+    "Gradien = (selisih y) ÷ (selisih x) dari dua titik.",
+    "Hitung $(7 - 3) \\div (4 - 2)$ dulu, lalu masukkan titik A ke $y = mx + c$ untuk mencari c.",
+    "Contoh mirip: titik (1, 2) dan (3, 6) → $m = 4 \\div 2 = 2$, lalu $2 = 2(1) + c$ → $c = 0$."
+  ],
+  "explanation": "$m = 2$, $c = -1$, jadi $y = 2x - 1$. Saat $x = 5$: $y = 10 - 1 = 9$.",
+  "sameConceptAs": ["BS-2"],
+  "sameConceptNote": "Konsep sama dengan soal Biaya Fotokopi: dua titik → gradien → c → persamaan."
+}

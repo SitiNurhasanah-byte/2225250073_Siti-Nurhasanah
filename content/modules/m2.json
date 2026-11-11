@@ -1,0 +1,35 @@
+{
+  "id": "M2",
+  "order": 2,
+  "title": "Dari Persamaan ke Grafik",
+  "summary": "Substitusi, tabel nilai, dan menggambar garis",
+  "objectives": ["TP2", "TP3"],
+  "cards": [
+    {
+      "title": "Persamaan garis",
+      "body": "$y = 2x - 1$ adalah [[persamaan garis]]. Persamaan ini seperti aturan: ambil x, kalikan 2, lalu kurangi 1."
+    },
+    {
+      "title": "Substitusi",
+      "body": "Mengganti x dengan angka disebut [[substitusi]]. Jika $x = 2$: $y = 2 \\times 2 - 1 = 4 - 1 = 3$. **Kalikan dulu, baru kurangi.**",
+      "graph": { "x": [-3, 5], "y": [-4, 8], "points": [{ "x": 2, "y": 3, "label": "(2, 3)" }] }
+    },
+    {
+      "title": "Tabel nilai",
+      "body": "Setiap pasangan x dan y adalah satu titik. Untuk $y = 2x - 1$: $(0, -1)$, $(1, 1)$, dan $(2, 3)$.",
+      "graph": { "x": [-3, 5], "y": [-4, 8], "points": [{ "x": 0, "y": -1 }, { "x": 1, "y": 1 }, { "x": 2, "y": 3 }] }
+    },
+    {
+      "title": "Hubungkan titik",
+      "body": "Titik-titik dari satu persamaan garis selalu segaris. Hubungkan dengan satu garis lurus. Cukup 2 titik, tetapi 3 titik membantu mengecek.",
+      "graph": { "x": [-3, 5], "y": [-4, 8], "points": [{ "x": 0, "y": -1 }, { "x": 1, "y": 1 }, { "x": 2, "y": 3 }], "lines": [{ "m": "2", "c": "-1" }] }
+    }
+  ],
+  "example": { "itemId": "LT-M2-1" },
+  "practice": [{ "itemId": "LT-M2-2", "prefill": 1 }],
+  "recap": [
+    "Substitusi: ganti x dengan angka, kalikan dulu, baru tambah/kurangi.",
+    "Setiap pasangan (x, y) dari tabel adalah satu titik.",
+    "Hubungkan titik-titik menjadi satu garis lurus."
+  ]
+}

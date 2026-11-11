@@ -1,0 +1,50 @@
+{
+  "id": "LT-M1-2",
+  "group": "learning",
+  "title": "Mencari Harta Karun",
+  "indicator": "interpret",
+  "objectives": ["TP1"],
+  "draft": true,
+  "context": "Dalam sebuah permainan, Rina mulai dari titik (0, 0). Ia berjalan 3 satuan ke kanan, lalu 5 satuan ke bawah, kemudian 6 satuan ke kiri. Tentukan koordinat posisi akhir Rina dan di kuadran berapa posisi tersebut berada.",
+  "given": ["Mulai di (0, 0)", "3 ke kanan, 5 ke bawah, 6 ke kiri"],
+  "asked": ["Koordinat posisi akhir", "Kuadran posisi akhir"],
+  "steps": [
+    {
+      "stage": 1, "score": 1, "label": "Arah gerak", "kind": "choice",
+      "prompt": "Berjalan ke kanan atau ke kiri mengubah…",
+      "options": ["nilai x", "nilai y"],
+      "answer": 0,
+      "why": "Kanan/kiri mengubah x. Atas/bawah mengubah y.",
+      "misconceptions": [{ "value": "1", "code": "M-KOOR-01" }]
+    },
+    {
+      "stage": 2, "score": 1, "label": "Posisi sementara", "kind": "plot",
+      "prompt": "Ketuk posisi Rina setelah 3 ke kanan lalu 5 ke bawah.",
+      "answer": [[3, -5]],
+      "graph": { "x": [-6, 6], "y": [-6, 6] },
+      "why": "3 ke kanan → x = 3. 5 ke bawah → y = −5. Posisinya (3, −5)."
+    },
+    {
+      "stage": 3, "score": 1, "label": "Posisi akhir", "kind": "plot",
+      "prompt": "Rina lalu berjalan 6 ke kiri. Ketuk posisi akhirnya.",
+      "answer": [[-3, -5]],
+      "graph": { "x": [-6, 6], "y": [-6, 6], "points": [{ "x": 3, "y": -5, "label": "(3, −5)" }] },
+      "why": "Ke kiri mengurangi x: 3 − 6 = −3. Posisi akhir (−3, −5)."
+    },
+    {
+      "stage": 4, "score": 1, "label": "Kuadran", "kind": "choice",
+      "prompt": "Posisi akhir (−3, −5) berada di kuadran…",
+      "options": ["I", "II", "III", "IV"],
+      "answer": 2,
+      "why": "x negatif dan y negatif → kuadran III.",
+      "misconceptions": [{ "value": "3", "code": "M-KOOR-02" }, { "value": "1", "code": "M-KOOR-02" }]
+    }
+  ],
+  "hints": [
+    "Catat perubahan x dan y satu per satu.",
+    "Ke kanan: x bertambah. Ke kiri: x berkurang. Ke bawah: y berkurang.",
+    "Contoh: dari (0, 0), 2 ke kiri lalu 1 ke atas → (−2, 1)."
+  ],
+  "explanation": "(0, 0) → (3, 0) → (3, −5) → (−3, −5). Posisi akhir di kuadran III.",
+  "sameConceptAs": ["LT-M1-1"]
+}

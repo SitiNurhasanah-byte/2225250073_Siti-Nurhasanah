@@ -1,0 +1,88 @@
+{
+  "id": "BS-1",
+  "group": "learning",
+  "title": "Pilihan Paket Sewa Sepeda",
+  "indicator": "reason",
+  "objectives": ["TP2", "TP8"],
+  "context": "Sebuah tempat penyewaan sepeda menawarkan dua pilihan tarif. Paket A menetapkan biaya awal Rp5.000 dan biaya tambahan Rp2.000 untuk setiap jam pemakaian. Paket B menetapkan biaya awal Rp1.000 dan biaya tambahan Rp3.000 untuk setiap jam pemakaian. Rani ingin menyewa sepeda selama 6 jam. Paket manakah yang sebaiknya dipilih Rani agar biaya sewanya lebih murah? Jelaskan alasan matematis Anda dengan menggunakan persamaan garis lurus.",
+  "given": ["Paket A: biaya awal Rp5.000, tambahan Rp2.000 per jam", "Paket B: biaya awal Rp1.000, tambahan Rp3.000 per jam", "Lama sewa: 6 jam"],
+  "asked": ["Paket yang biayanya lebih murah"],
+  "graph": {
+    "x": [0, 8], "y": [0, 25000], "xStep": 1, "yStep": 5000,
+    "lines": [
+      { "m": "2000", "c": "5000", "label": "A" },
+      { "m": "3000", "c": "1000", "label": "B", "dashed": true }
+    ]
+  },
+  "steps": [
+    {
+      "stage": 1, "score": 1, "label": "Mengidentifikasi informasi", "kind": "number",
+      "prompt": "Berapa biaya tambahan **setiap jam** untuk Paket A?", "prefix": "Rp", "answer": "2000",
+      "why": "Biaya yang bertambah setiap jam Paket A adalah Rp2.000. Biaya awalnya Rp5.000 dan hanya dibayar sekali.",
+      "misconceptions": [{ "value": "5000", "code": "M-MODEL-01" }]
+    },
+    {
+      "stage": 2, "score": 1, "label": "Model Paket A", "kind": "equation",
+      "prompt": "Misalkan x = lama sewa (jam) dan y = total biaya. Tuliskan persamaan biaya Paket A.", "answer": "y = 2000x + 5000",
+      "why": "Biaya per jam dikalikan x (gradien), biaya awal ditambahkan (konstanta): $y = 2.000x + 5.000$.",
+      "misconceptions": [{ "value": "y = 5000x + 2000", "code": "M-MODEL-01" }]
+    },
+    {
+      "stage": 2, "score": 1, "label": "Model Paket B", "kind": "equation",
+      "prompt": "Tuliskan persamaan biaya Paket B.", "answer": "y = 3000x + 1000",
+      "why": "Paket B: Rp3.000 setiap jam dan biaya awal Rp1.000, jadi $y = 3.000x + 1.000$.",
+      "misconceptions": [{ "value": "y = 1000x + 3000", "code": "M-MODEL-01" }]
+    },
+    {
+      "stage": 3, "score": 0.5, "label": "Biaya Paket A", "kind": "number",
+      "prompt": "Hitung biaya Paket A untuk 6 jam: $y = 2.000(6) + 5.000$", "prefix": "Rp", "answer": "17000",
+      "why": "$2.000 \\times 6 = 12.000$, lalu $12.000 + 5.000 = 17.000$.",
+      "misconceptions": [{ "value": "12000", "code": "M-OP-02" }, { "value": "1200", "code": "M-OP-05" }, { "value": "6200", "code": "M-OP-05" }]
+    },
+    {
+      "stage": 3, "score": 0.5, "label": "Biaya Paket B", "kind": "number",
+      "prompt": "Hitung biaya Paket B untuk 6 jam: $y = 3.000(6) + 1.000$", "prefix": "Rp", "answer": "19000",
+      "why": "$3.000 \\times 6 = 18.000$, lalu $18.000 + 1.000 = 19.000$.",
+      "misconceptions": [{ "value": "18000", "code": "M-OP-02" }, { "value": "1800", "code": "M-OP-05" }]
+    },
+    {
+      "stage": 4, "score": 1, "label": "Membandingkan", "kind": "choice",
+      "prompt": "Untuk 6 jam, paket mana yang lebih murah?",
+      "options": ["Paket A, karena Rp17.000 < Rp19.000", "Paket B, karena Rp19.000 < Rp17.000", "Keduanya sama"],
+      "answer": 0,
+      "why": "Rp17.000 lebih kecil daripada Rp19.000, jadi Paket A lebih murah untuk 6 jam."
+    },
+    {
+      "stage": 5, "score": 1, "label": "Mengambil keputusan", "kind": "choice",
+      "prompt": "Paket mana yang sebaiknya dipilih Rani, dan mengapa?",
+      "options": [
+        "Paket A, karena untuk 6 jam total biayanya lebih rendah (Rp17.000)",
+        "Paket B, karena biaya awalnya lebih murah",
+        "Paket B, karena tarif per jamnya lebih besar"
+      ],
+      "answer": 0,
+      "why": "Keputusan harus berdasarkan total biaya untuk 6 jam, bukan hanya biaya awal.",
+      "misconceptions": [{ "value": "1", "code": "M-KEP-01" }]
+    },
+    {
+      "stage": 6, "score": 0, "label": "Jelaskan caramu", "kind": "choice", "selfExplain": true,
+      "prompt": "Lihat grafik. Apakah Paket A **selalu** lebih murah untuk berapa pun lama sewa?",
+      "options": [
+        "Ya, Paket A selalu lebih murah",
+        "Tidak. Kedua garis berpotongan di x = 4. Untuk sewa kurang dari 4 jam, Paket B lebih murah",
+        "Tidak. Paket B selalu lebih murah"
+      ],
+      "answer": 1,
+      "why": "Kedua garis berpotongan di (4, 13.000): biayanya sama saat 4 jam. Sebelum 4 jam garis B di bawah garis A, setelah 4 jam garis A di bawah.",
+      "misconceptions": [{ "value": "0", "code": "M-KEP-01" }]
+    }
+  ],
+  "hints": [
+    "Tulis model setiap paket dalam bentuk $y = mx + c$: m = biaya per jam, c = biaya awal.",
+    "Paket A: $y = 2.000x + 5.000$. Ganti x dengan 6, kalikan dulu, lalu tambahkan biaya awal.",
+    "Contoh mirip: biaya awal Rp3.000 dan Rp1.000 per jam, untuk 4 jam: $1.000(4) + 3.000 = 7.000$."
+  ],
+  "explanation": "Paket A: $y = 2.000x + 5.000$ → Rp17.000. Paket B: $y = 3.000x + 1.000$ → Rp19.000. Untuk 6 jam, Rani sebaiknya memilih Paket A.",
+  "sameConceptAs": ["BS-4"],
+  "sameConceptNote": "Konsep sama dengan soal Tabungan: nilai awal (c) + laju per satuan (m)."
+}

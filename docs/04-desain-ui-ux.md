@@ -180,15 +180,100 @@ Buat prototipe *low-fidelity* (kertas/Figma) dari L02–L06, uji ke 2–3 siswa 
 sebelum pengembangan. Catat kebingungan sebagai revisi desain.
 
 
-### Elemen Dekoratif Aplikasi
+## 7. Elemen Dekoratif Aplikasi
 
-Elemen dekoratif digunakan untuk memperindah tampilan aplikasi agar lebih menarik dan nyaman digunakan oleh siswa. Elemen ini tidak berfungsi sebagai materi pembelajaran, melainkan sebagai pendukung visual.
+Elemen dekoratif digunakan untuk memperindah tampilan aplikasi agar lebih menarik dan nyaman digunakan
+oleh siswa. Elemen ini tidak berfungsi sebagai materi pembelajaran, melainkan sebagai pendukung visual.
 
-Beberapa elemen dekoratif yang digunakan meliputi:
+Elemen dekoratif yang digunakan:
 
-1. Ilustrasi atau karakter kartun pada halaman utama.
+1. Karakter maskot dengan mata besar yang ekspresif pada halaman utama.
 2. Ornamen geometris sebagai latar belakang.
 3. Ikon dekoratif pada menu aplikasi.
-4. Gambar pendukung untuk mempercantik halaman materi dan kuis.
+4. Gambar pendukung pada halaman materi dan kuis, dengan batasan pada §7.3.
 
-Pemilihan elemen dekoratif disesuaikan dengan tema warna dan karakteristik siswa SMP agar tampilan aplikasi terlihat menarik, sederhana, dan tidak mengganggu fokus belajar.
+Pemilihan elemen dekoratif disesuaikan dengan tema warna dan karakteristik siswa SMP agar tampilan
+aplikasi terlihat menarik, sederhana, dan tidak mengganggu fokus belajar.
+
+### 7.1 Maskot: karakter orisinal, bukan Minions
+
+Karakter Minions (dan karakter kartun terkenal lainnya) adalah milik pemegang hak cipta dan merek
+dagang. Gambarnya **tidak boleh** dipakai di aplikasi yang dibagikan sebagai APK, PWA publik, atau
+dilampirkan di skripsi yang dipublikasikan, termasuk untuk tujuan pendidikan. Gantinya, buat
+**maskot orisinal** yang tetap memakai ide "mata besar yang ekspresif".
+
+Usulan: **"Gari"**, karakter berbentuk **segitiga gradien** (segitiga siku-siku "maju–naik") dengan
+dua mata bulat besar.
+- **Bentuk:** sederhana dan datar (flat), garis tepi tebal, tanpa bayangan realistis.
+- **Warna:** `accent` (biru) dan putih/netral sesuai palet §1. Hindari kuning mencolok.
+- **Mata:** sumber ekspresi utama: senang, berpikir, semangat, tenang.
+- **Makna:** bentuknya mengingatkan siswa pada konsep gradien (Δy/Δx), sehingga maskot tidak sekadar hiasan.
+- **Pembuatan:** gambar sendiri (Figma/Inkscape/Canva), atau minta bantuan teman desain. Simpan sebagai SVG agar ringan dan offline.
+
+| Ekspresi | Dipakai di |
+|---|---|
+| Melambai, mata senang | L01 Sambutan, L02 Beranda |
+| Mata berpikir (melirik ke atas) | Tombol/panel Petunjuk |
+| Tangan terangkat, mata berbinar | Selesai satu modul (L09 Rekap) |
+| Mata tenang, senyum kecil | Status kosong, mis. "Belum ada rekap" |
+
+> Tidak ada ekspresi sedih atau marah saat siswa salah, agar siswa tidak merasa dihakimi (GL02).
+
+### 7.2 Ornamen geometris & ikon
+
+- **Ornamen latar:** pola grid koordinat tipis, titik-titik, atau garis miring, dengan warna `border`
+  dan opasitas ≤ 10%. Hanya di L01, L02, dan L09. Tidak dipakai di belakang teks atau grafik.
+- **Ikon menu:** satu set ikon garis yang konsisten (mis. Lucide, lisensi ISC), dengan warna `text-muted`
+  atau `accent`. Satu ikon per menu, tanpa animasi.
+
+### 7.2a Ikon dekoratif pisang & mata bulat
+
+**Pisang** (gaya stiker kartun: garis tepi hitam, isi kuning, bingkai putih) boleh dipakai karena
+pisang adalah benda umum, bukan karakter berhak cipta. Syaratnya digambar sendiri atau diambil dari
+aset berlisensi bebas, bukan diunduh dari situs stiker berbayar.
+
+| Penggunaan | Detail | Layar |
+|---|---|---|
+| Pola latar | Pisang kecil tersebar miring, opasitas 10–15%, menggantikan/menyertai ornamen geometris | L01, L02, L09 |
+| Penanda capaian (F14) | Satu pisang "terkumpul" setiap modul selesai, ditampilkan di Peta Belajar. **Non-kompetitif:** hanya untuk diri sendiri, tanpa peringkat | L02, L09 |
+| Ikon menu | Pisang kecil sebagai ikon "Rekap/Capaian" | L02 |
+| Status kosong | "Belum ada pisang terkumpul. Yuk mulai dari M1!" | L09 |
+
+**Mata bulat dalam bingkai** (seperti gambar referensi): kacamata pelindung dua lensa dengan tali hitam
+adalah ciri khas karakter Minions, jadi **bentuk persis itu tidak dipakai**. Idenya dipakai pada maskot
+Gari (§7.1): dua mata bulat besar dengan pupil cokelat, garis tepi abu-abu tipis, **tanpa tali hitam
+dan tanpa badan kuning berbentuk kapsul**. Mata Gari boleh dipakai sendiri sebagai ikon kecil, mis.
+pada tombol Petunjuk ("Gari sedang melihat…").
+
+**Token warna dekoratif** (hanya untuk ilustrasi, **tidak boleh** untuk tombol, teks, atau status):
+
+| Token | Hex | Fungsi |
+|---|---|---|
+| `decor-yellow` | `#F2C94C` | Isi pisang |
+| `decor-yellow-dark` | `#D4A72C` | Bayangan pisang |
+| `decor-outline` | `#2B2B2B` | Garis tepi ilustrasi |
+| `decor-eye` | `#8B5A2B` | Pupil mata Gari |
+
+Kuning dipakai lembut, tidak neon, dan tidak pernah di layar materi, latihan, atau Lab Garis
+(DS03: warna mencolok mengganggu).
+
+### 7.3 Batasan penempatan (berdasarkan temuan wawancara)
+
+Siswa S01 menyatakan **warna mencolok mengganggu** (DS03). Teori beban kognitif juga menunjukkan
+gambar menarik yang tidak berkaitan dengan materi (*seductive details*) dapat menurunkan pemahaman,
+karena menambah beban ekstrinsik. Karena itu dekorasi diatur per layar:
+
+| Layar | Maskot | Ornamen | Gambar pendukung |
+|---|---|---|---|
+| L01 Sambutan, L02 Beranda | ✓ ukuran besar | ✓ | ✓ |
+| L09 Rekap, status kosong | ✓ | ✓ | — |
+| L03 Kartu Pelajaran | Kecil (≤ 48 px), hanya di panel petunjuk | ✗ | Hanya gambar yang **menjelaskan materi** (grafik, ilustrasi konteks soal) |
+| L04 Lab Garis | ✗ | ✗ | ✗ (grafik adalah fokus) |
+| L05–L07 Contoh & Latihan | Kecil, hanya di panel petunjuk | ✗ | Hanya ilustrasi konteks soal cerita (mis. sepeda, mesin fotokopi), bergaya datar dan berwarna netral |
+| L08 Mental Effort, L10 Penelitian | ✗ | ✗ | ✗ |
+
+Aturan umum:
+- Dekorasi **tidak bergerak sendiri**. Animasi maskot hanya muncul saat dipicu siswa, ≤ 1 detik (EL04).
+- Dekorasi **tidak menambah warna aksen baru** (§1). Warna `decor-*` hanya untuk ilustrasi (§7.2a).
+- Setiap gambar dekoratif memakai `alt=""` (diabaikan pembaca layar). Ilustrasi konteks soal memakai alt deskriptif.
+- Saat uji one-to-one, tanyakan ke siswa apakah maskot dan ornamen membantu atau mengganggu, lalu catat sebagai bahan revisi.

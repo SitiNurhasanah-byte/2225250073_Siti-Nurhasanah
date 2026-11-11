@@ -1,0 +1,10 @@
+[
+  { "id": "BS-1", "test": "pretest", "title": "Pilihan Paket Sewa Sepeda", "indicator": "reason", "stages": [1, 2, 1, 1, 1] },
+  { "id": "BS-2", "test": "pretest", "title": "Biaya Fotokopi", "indicator": "formulate", "stages": [1, 1, 1, 1, 1, 1] },
+  { "id": "BS-3", "test": "pretest", "title": "Persamaan Garis pada Peta", "indicator": "employ", "stages": [1, 1, 1, 1, 1, 1] },
+  { "id": "BS-4", "test": "pretest", "title": "Tabungan untuk Membeli Buku", "indicator": "interpret", "stages": [1, 1, 1, 1, 1, 1] },
+  { "id": "PT-1", "test": "posttest", "title": "Pilihan Tarif Ojek", "indicator": "reason", "stages": [1, 2, 1, 1, 1] },
+  { "id": "PT-2", "test": "posttest", "title": "Biaya Cetak Foto", "indicator": "formulate", "stages": [1, 1, 1, 1, 1, 1] },
+  { "id": "PT-3", "test": "posttest", "title": "Jalur Kabel pada Denah", "indicator": "employ", "stages": [1, 1, 1, 1, 1, 1] },
+  { "id": "PT-4", "test": "posttest", "title": "Mengisi Bak Penampung Air", "indicator": "interpret", "stages": [1, 1, 1, 1, 1, 1] }
+]

@@ -1,0 +1,66 @@
+{
+  "id": "LT-M2-2",
+  "group": "learning",
+  "title": "Lilin yang Menyala",
+  "indicator": "formulate",
+  "objectives": ["TP2", "TP3"],
+  "draft": true,
+  "context": "Sebuah lilin mula-mula tingginya 20 cm. Setelah dinyalakan, lilin memendek 2 cm setiap jam. Misalkan x menyatakan lama lilin menyala (jam) dan y menyatakan tinggi lilin (cm).",
+  "given": ["Tinggi awal 20 cm", "Memendek 2 cm setiap jam"],
+  "asked": ["Persamaan garis", "Bentuk grafik", "Kapan lilin habis?"],
+  "graph": {
+    "x": [0, 12], "y": [0, 24], "xStep": 1, "yStep": 4,
+    "points": [{ "x": 0, "y": 20 }, { "x": 2, "y": 16 }, { "x": 4, "y": 12 }, { "x": 6, "y": 8 }],
+    "lines": [{ "m": "-2", "c": "20" }]
+  },
+  "steps": [
+    {
+      "stage": 1, "score": 1, "label": "Mengidentifikasi informasi", "kind": "number",
+      "prompt": "Berapa tinggi lilin saat **belum** menyala (x = 0)?", "suffix": "cm", "answer": "20",
+      "why": "Tinggi awal 20 cm adalah konstanta c.",
+      "misconceptions": [{ "value": "2", "code": "M-MODEL-01" }]
+    },
+    {
+      "stage": 2, "score": 1, "label": "Menyusun model", "kind": "equation",
+      "prompt": "Tuliskan persamaan tinggi lilin y setelah x jam.", "answer": "y = -2x + 20",
+      "why": "Tinggi **berkurang** 2 cm setiap jam, jadi gradiennya −2: $y = -2x + 20$.",
+      "misconceptions": [{ "value": "y = 2x + 20", "code": "M-GRAD-05" }, { "value": "y = 20x - 2", "code": "M-MODEL-01" }]
+    },
+    {
+      "stage": 3, "score": 1, "label": "Tabel nilai", "kind": "number",
+      "prompt": "Untuk $x = 4$: $y = -2(4) + 20$. Berapa y?", "suffix": "cm", "answer": "12",
+      "why": "$-2 \\times 4 = -8$, lalu $-8 + 20 = 12$. Tabel: x = 0, 2, 4, 6 → y = 20, 16, 12, 8.",
+      "misconceptions": [{ "value": "28", "code": "M-OP-04" }, { "value": "-8", "code": "M-OP-02" }]
+    },
+    {
+      "stage": 4, "score": 1, "label": "Bentuk grafik", "kind": "choice",
+      "prompt": "Bagaimana bentuk grafiknya?",
+      "options": ["Garis turun dari kiri ke kanan, melalui (0, 20)", "Garis naik melalui (0, 20)", "Garis mendatar di y = 20"],
+      "answer": 0,
+      "why": "Gradien negatif membuat garis turun. Garis memotong sumbu-y di (0, 20).",
+      "misconceptions": [{ "value": "1", "code": "M-GRAD-05" }]
+    },
+    {
+      "stage": 5, "score": 1, "label": "Lilin habis", "kind": "number",
+      "prompt": "Lilin habis saat $y = 0$: $0 = -2x + 20$. Berapa x?", "suffix": "jam", "answer": "10",
+      "why": "$2x = 20$, jadi $x = 10$.",
+      "misconceptions": [{ "value": "-10", "code": "M-ALJ-01" }, { "value": "18", "code": "M-ALJ-01" }]
+    },
+    {
+      "stage": 6, "score": 1, "label": "Menyimpulkan", "kind": "choice",
+      "prompt": "Pilih kesimpulan yang tepat.",
+      "options": ["$y = -2x + 20$; lilin habis setelah 10 jam", "$y = 2x + 20$; lilin tidak pernah habis", "$y = -2x + 20$; lilin habis setelah 20 jam"],
+      "answer": 0,
+      "why": "Model dan waktu habis keduanya harus disebutkan.",
+      "misconceptions": [{ "value": "1", "code": "M-GRAD-05" }, { "value": "2", "code": "M-MODEL-02" }]
+    }
+  ],
+  "hints": [
+    "Nilai awal (x = 0) adalah c. Perubahan setiap jam adalah m.",
+    "Karena tingginya berkurang, gradiennya bernilai negatif.",
+    "Contoh mirip: air 30 liter berkurang 3 liter per menit → $y = -3x + 30$, habis saat $x = 10$."
+  ],
+  "explanation": "$y = -2x + 20$. Garis turun melalui (0, 20) dan menyentuh sumbu-x di (10, 0): lilin habis setelah 10 jam.",
+  "sameConceptAs": ["BS-4"],
+  "sameConceptNote": "Mirip soal Tabungan, tetapi nilainya berkurang sehingga gradiennya negatif."
+}

@@ -5,11 +5,60 @@
 > Dikembangkan dengan model **ADDIE**.
 
 **Pengembang:** Siti Nurhasanah (2225250073) — S1 Pendidikan Matematika
-**Status:** Tahap *Analysis* selesai (wawancara siswa S01, 6 November 2026) → masuk tahap *Design*.
+**Status:** Tahap *Development* — versi MVP 0.1.0 (6 modul, 10 soal, Lab Garis, menu peneliti) sudah bisa dijalankan.
 
 > "GarisKu" adalah nama kerja; silakan diganti.
 
 ---
+
+## Menjalankan Aplikasi
+
+Prasyarat: **Node.js 20+** (sudah terpasang: v26). Jalankan perintah dari folder ini.
+
+```bash
+npm install          # sekali saja, memasang paket
+npm run dev          # mode pengembangan → buka http://localhost:5173
+npm run dev:hp       # sama, tapi bisa dibuka dari HP Android di Wi-Fi yang sama
+                     # (buka alamat "Network: http://192.168.x.x:5173" yang muncul di terminal)
+npm run test         # 59 unit test (matematika, umpan balik, validasi konten)
+npm run build        # build produksi ke folder dist/
+npm run preview      # mencoba hasil build → http://localhost:4173
+```
+
+### Alamat web
+
+**https://sitinurhasanah-byte.github.io/2225250073_Siti-Nurhasanah/**
+
+Setiap `git push` ke branch `main` otomatis menjalankan tes, membangun, dan memperbarui alamat di atas
+(lihat tab **Actions** di GitHub). Di HP Android: buka alamat itu di Chrome → menu ⋮ → **Instal aplikasi**.
+
+### Satu kode untuk semua perangkat
+
+| Platform | Cara memakai | Yang dibutuhkan |
+|---|---|---|
+| **Web (semua OS)** | Unggah isi `dist/` ke hosting statis (GitHub Pages, Netlify, Vercel), lalu buka alamatnya di browser | Hosting gratis |
+| **Windows / macOS / Linux / ChromeOS** | Buka alamat web di Chrome/Edge → ikon **Instal** di bilah alamat. Aplikasi muncul di menu Start/Dock dan berjalan offline | Browser Chrome/Edge |
+| **Android** (cara cepat) | Buka alamat web di Chrome → menu ⋮ → **Instal aplikasi / Tambahkan ke layar utama** | — |
+| **Android** (APK / Play Store) | `npx cap add android` (sekali) → `npm run cap:sync` → `npx cap open android` → di Android Studio: *Build → Generate Signed APK* | Android Studio |
+| **iPhone / iPad** (cara cepat) | Buka alamat web di Safari → tombol **Bagikan** → **Tambah ke Layar Utama** | — |
+| **iPhone / iPad** (App Store) | Di komputer **Mac**: `npx cap add ios` → `npm run build && npx cap sync ios` → `npx cap open ios` → build di Xcode | Mac + Xcode + akun Apple Developer |
+
+Setelah dibuka sekali, seluruh materi dan latihan **bisa dipakai tanpa internet** (Service Worker).
+Data belajar tersimpan hanya di perangkat; peneliti mengambilnya lewat **Pengaturan → Ekspor JSON/CSV**.
+
+### Struktur kode singkat
+
+```
+content/        materi (modules/), soal (bank/), glosarium, miskonsepsi, rubrik penelitian
+src/lib/        logika murni + unit test: math/, feedback/, content/, progress/, export/
+src/components/ CartesianPlane, MathText (KaTeX), Gari (maskot), Banana, HintPanel, Feedback
+src/features/   home, lesson, worked-example, practice, lab, progress, settings, research
+```
+
+Menambah/mengubah soal cukup lewat file JSON di `content/bank/`; jalankan `npm run validate:content`
+untuk memastikan kunci jawabannya benar.
+
+--- 
 
 ## Peta Dokumen Perencanaan
 

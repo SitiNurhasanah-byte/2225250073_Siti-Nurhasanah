@@ -1,0 +1,47 @@
+{
+  "id": "M1",
+  "order": 1,
+  "title": "Titik di Bidang Cartesius",
+  "summary": "Membaca dan menaruh titik (x, y)",
+  "objectives": ["TP1"],
+  "cards": [
+    {
+      "title": "Bidang Cartesius",
+      "body": "Bidang Cartesius dibentuk oleh dua garis bilangan: [[sumbu-x]] yang mendatar dan [[sumbu-y]] yang tegak. Keduanya berpotongan di titik $O(0, 0)$.",
+      "graph": { "x": [-5, 5], "y": [-5, 5], "points": [{ "x": 0, "y": 0, "label": "O" }] }
+    },
+    {
+      "title": "Menulis titik (x, y)",
+      "body": "Titik ditulis $(x, y)$. Angka pertama ([[absis]]) menunjukkan geser kanan atau kiri. Angka kedua ([[ordinat]]) menunjukkan geser atas atau bawah.",
+      "graph": { "x": [-5, 5], "y": [-5, 5], "points": [{ "x": 3, "y": 2, "label": "(3, 2)" }] }
+    },
+    {
+      "title": "Cara menaruh titik",
+      "body": "Untuk $(3, 2)$: mulai dari $O$, geser 3 ke kanan, lalu 2 ke atas. **Selalu x dulu, baru y.**",
+      "graph": { "x": [-5, 5], "y": [-5, 5], "points": [{ "x": 3, "y": 0, "label": "3 ke kanan" }, { "x": 3, "y": 2, "label": "lalu 2 ke atas" }] }
+    },
+    {
+      "title": "Bilangan negatif",
+      "body": "x negatif berarti geser ke kiri. y negatif berarti geser ke bawah. Contoh: $(-2, 4)$ artinya 2 ke kiri, lalu 4 ke atas.",
+      "graph": { "x": [-5, 5], "y": [-5, 5], "points": [{ "x": -2, "y": 4, "label": "(−2, 4)" }, { "x": 2, "y": -3, "label": "(2, −3)" }] }
+    },
+    {
+      "title": "Empat kuadran",
+      "body": "Kedua sumbu membagi bidang menjadi empat [[kuadran]]. Kuadran I $(+, +)$, II $(-, +)$, III $(-, -)$, dan IV $(+, -)$.",
+      "graph": {
+        "x": [-5, 5], "y": [-5, 5],
+        "points": [
+          { "x": 3, "y": 3, "label": "I" }, { "x": -3, "y": 3, "label": "II" },
+          { "x": -3, "y": -3, "label": "III" }, { "x": 3, "y": -3, "label": "IV" }
+        ]
+      }
+    }
+  ],
+  "example": { "itemId": "LT-M1-1" },
+  "practice": [{ "itemId": "LT-M1-2", "prefill": 1 }],
+  "recap": [
+    "Titik ditulis (x, y): x untuk kanan/kiri, y untuk atas/bawah.",
+    "Tanda negatif berarti ke kiri (x) atau ke bawah (y).",
+    "Kuadran I–IV ditentukan oleh tanda x dan y."
+  ]
+}

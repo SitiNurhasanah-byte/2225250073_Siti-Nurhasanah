@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Token warna — docs/04-desain-ui-ux.md §1 (format "R G B" untuk Tailwind). */
+:root {
+  --bg: 248 249 251;
+  --surface: 255 255 255;
+  --text: 31 41 51;
+  --muted: 82 96 109;
+  --border: 217 222 228;
+  --accent: 37 99 235;
+  --accent-soft: 224 234 254;
+  --success: 21 128 61;
+  --error: 185 28 28;
+  --hint-fg: 146 64 14;
+  --hint-bg: 254 243 199;
+  /* Warna dekoratif (§7.2a) — hanya untuk ilustrasi, tidak untuk tombol/teks/status. */
+  --decor-yellow: 242 201 76;
+  --decor-yellow-dark: 212 167 44;
+  --decor-outline: 43 43 43;
+  --decor-eye: 139 90 43;
+  --decor-rim: 154 165 177;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: 17 24 39;
+  --surface: 31 41 55;
+  --text: 243 244 246;
+  --muted: 156 163 175;
+  --border: 55 65 81;
+  --accent: 96 165 250;
+  --accent-soft: 30 58 138;
+  --success: 74 222 128;
+  --error: 248 113 113;
+  --hint-fg: 253 230 138;
+  --hint-bg: 69 49 13;
+  color-scheme: dark;
+}
+
+html {
+  font-size: 106.25%; /* 17px: teks kartu */
+  -webkit-text-size-adjust: 100%;
+}
+html.font-large {
+  font-size: 125%; /* 20px */
+}
+
+body {
+  @apply bg-bg font-sans text-text antialiased;
+  line-height: 1.5;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.decor-fill-yellow { fill: rgb(var(--decor-yellow)); }
+.decor-fill-yellow-dark { fill: rgb(var(--decor-yellow-dark)); }
+.decor-stroke-yellow-dark { stroke: rgb(var(--decor-yellow-dark)); }
+.decor-fill-outline { fill: rgb(var(--decor-outline)); }
+.decor-stroke-outline { stroke: rgb(var(--decor-outline)); }
+.decor-fill-eye { fill: rgb(var(--decor-eye)); }
+.decor-stroke-rim { stroke: rgb(var(--decor-rim)); }
+
+/* Fokus keyboard yang jelas */
+:focus-visible {
+  outline: 3px solid rgb(var(--accent));
+  outline-offset: 2px;
+}
+
+.katex {
+  font-size: 1.15em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}

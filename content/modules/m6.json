@@ -1,0 +1,37 @@
+{
+  "id": "M6",
+  "order": 6,
+  "title": "Soal Cerita Garis Lurus",
+  "summary": "Menyusun model, membandingkan, dan menilai",
+  "objectives": ["TP8"],
+  "cards": [
+    {
+      "title": "Bedah soal",
+      "body": "Tandai dulu yang **diketahui** dan yang **ditanya**. Cari nilai awal (saat x = 0) dan nilai yang bertambah setiap satuan."
+    },
+    {
+      "title": "Nilai awal = c",
+      "body": "Biaya awal, tabungan awal, atau isi awal adalah [[konstanta]] c. Nilai ini hanya dihitung sekali."
+    },
+    {
+      "title": "Laju = m",
+      "body": "Yang bertambah setiap jam, hari, atau lembar adalah [[gradien]] m. Nilai ini dikalikan dengan x."
+    },
+    {
+      "title": "Membandingkan dua pilihan",
+      "body": "Tulis [[model matematika]] untuk setiap pilihan, lalu hitung pada x yang ditanya. Pada grafik, titik potong kedua garis menunjukkan saat nilainya sama.",
+      "graph": {
+        "x": [0, 8], "y": [0, 25000], "xStep": 1, "yStep": 5000,
+        "lines": [{ "m": "2000", "c": "5000", "label": "A" }, { "m": "3000", "c": "1000", "label": "B", "dashed": true }],
+        "points": [{ "x": 4, "y": 13000, "label": "sama" }]
+      }
+    }
+  ],
+  "example": { "itemId": "BS-1" },
+  "practice": [{ "itemId": "BS-4", "prefill": 1 }],
+  "recap": [
+    "Nilai awal → c, laju per satuan → m.",
+    "Bandingkan pilihan dengan menghitung, bukan menebak.",
+    "Periksa setiap pernyataan dengan substitusi."
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": "LT-M1-1",
+  "group": "learning",
+  "title": "Denah Sekolah",
+  "indicator": "employ",
+  "objectives": ["TP1"],
+  "draft": true,
+  "context": "Pada denah sebuah sekolah, gerbang terletak di titik (0, 0). Letak beberapa tempat adalah Kantin K(3, 2), Perpustakaan P(−2, 4), Musala M(−4, −1), dan Lapangan L(2, −3).",
+  "given": ["Gerbang di (0, 0)", "K(3, 2), P(−2, 4), M(−4, −1), L(2, −3)"],
+  "asked": ["Kuadran setiap tempat", "Letak titik pada bidang Cartesius"],
+  "graph": {
+    "x": [-5, 5], "y": [-5, 5], "xStep": 1, "yStep": 1,
+    "points": [
+      { "x": 3, "y": 2, "label": "K" },
+      { "x": -2, "y": 4, "label": "P" },
+      { "x": -4, "y": -1, "label": "M" },
+      { "x": 2, "y": -3, "label": "L" }
+    ]
+  },
+  "steps": [
+    {
+      "stage": 1, "score": 1, "label": "Membaca titik", "kind": "choice",
+      "prompt": "Pada Kantin K(3, 2), angka 3 berarti…",
+      "options": ["geser 3 satuan ke kanan (nilai x)", "geser 3 satuan ke atas (nilai y)", "geser 3 satuan ke kiri"],
+      "answer": 0,
+      "why": "Angka pertama adalah absis (x): arah kanan/kiri. Angka kedua adalah ordinat (y): arah atas/bawah.",
+      "misconceptions": [{ "value": "1", "code": "M-KOOR-01" }, { "value": "2", "code": "M-KOOR-02" }]
+    },
+    {
+      "stage": 2, "score": 0.5, "label": "Kuadran Perpustakaan", "kind": "choice",
+      "prompt": "Perpustakaan P(−2, 4) berada di kuadran…",
+      "options": ["I", "II", "III", "IV"],
+      "answer": 1,
+      "why": "x negatif (kiri) dan y positif (atas), jadi kuadran II.",
+      "misconceptions": [{ "value": "0", "code": "M-KOOR-02" }, { "value": "3", "code": "M-KOOR-01" }]
+    },
+    {
+      "stage": 2, "score": 0.5, "label": "Kuadran Lapangan", "kind": "choice",
+      "prompt": "Lapangan L(2, −3) berada di kuadran…",
+      "options": ["I", "II", "III", "IV"],
+      "answer": 3,
+      "why": "x positif (kanan) dan y negatif (bawah), jadi kuadran IV.",
+      "misconceptions": [{ "value": "0", "code": "M-KOOR-02" }, { "value": "1", "code": "M-KOOR-01" }]
+    },
+    {
+      "stage": 3, "score": 1, "label": "Menggambar titik", "kind": "plot",
+      "prompt": "Ketuk bidang untuk menaruh keempat titik: K(3, 2), P(−2, 4), M(−4, −1), dan L(2, −3). Ketuk titik lagi untuk menghapusnya.",
+      "answer": [[3, 2], [-2, 4], [-4, -1], [2, -3]],
+      "graph": { "x": [-5, 5], "y": [-5, 5] },
+      "why": "Untuk setiap titik: mulai dari (0, 0), geser sesuai x dulu, lalu sesuai y."
+    },
+    {
+      "stage": 4, "score": 1, "label": "Menilai jawaban teman", "kind": "choice",
+      "prompt": "Andi menuliskan letak perpustakaan sebagai (4, −2). Apakah tulisan Andi benar?",
+      "options": [
+        "Tidak. Andi menukar urutan x dan y; perpustakaan di (−2, 4)",
+        "Ya, urutannya boleh dibalik",
+        "Tidak, seharusnya (−4, 2)"
+      ],
+      "answer": 0,
+      "why": "(4, −2) berarti 4 ke kanan dan 2 ke bawah, tempat yang berbeda dari (−2, 4).",
+      "misconceptions": [{ "value": "1", "code": "M-KOOR-01" }, { "value": "2", "code": "M-KOOR-02" }]
+    }
+  ],
+  "hints": [
+    "Titik (x, y): x untuk kanan/kiri, y untuk atas/bawah.",
+    "Kuadran I (+, +) kanan atas, II (−, +) kiri atas, III (−, −) kiri bawah, IV (+, −) kanan bawah.",
+    "Contoh: (−3, 1) → 3 ke kiri, 1 ke atas → kuadran II."
+  ],
+  "explanation": "K kuadran I, P kuadran II, M kuadran III, L kuadran IV. Urutan (x, y) tidak boleh dibalik.",
+  "sameConceptAs": ["LT-M1-2"]
+}

@@ -24,9 +24,12 @@ Dokumen acuan (baca sesuai kebutuhan, jangan menebak):
 - **Tailwind CSS** untuk styling (token warna di `tailwind.config.ts`, jangan hardcode hex di komponen)
 - **KaTeX** (`react-katex` atau render manual) untuk notasi matematika
 - **SVG kustom** untuk bidang Cartesius (komponen `CartesianPlane`) — jangan menambah library grafik berat
-- **Zustand** untuk state; **Dexie (IndexedDB)** untuk penyimpanan lokal
-- **vite-plugin-pwa** untuk offline; **Capacitor** untuk build Android
-- **Vitest + Testing Library** untuk unit/komponen; **Playwright** untuk E2E
+- **Zustand** + middleware `persist` (localStorage) untuk state dan penyimpanan lokal (v0.1).
+  Pindah ke IndexedDB (Dexie) hanya jika data melebihi ±5 MB.
+- **vite-plugin-pwa** untuk offline & instalasi (web, Windows, macOS, Android, iOS);
+  **Capacitor 7** untuk build native Android dan iOS (`@capacitor/app` untuk tombol kembali Android)
+- **Vitest** untuk unit test & validasi konten. Belum ada: ESLint, Testing Library, Playwright E2E
+- Routing memakai **HashRouter** agar jalan di hosting statis dan WebView Capacitor
 
 ## Perintah
 
@@ -36,11 +39,12 @@ npm run dev            # server pengembangan (http://localhost:5173)
 npm run build          # build produksi ke dist/
 npm run preview        # pratinjau build
 npm run test           # unit test (Vitest)
-npm run test:e2e       # E2E (Playwright)
-npm run lint           # ESLint + cek tipe (tsc --noEmit)
-npm run validate:content  # validasi skema semua file konten JSON
-npx cap sync android   # salin build web ke proyek Android
+npm run lint           # cek tipe (tsc --noEmit)
+npm run validate:content  # validasi skema + kebenaran kunci semua konten JSON
+npx cap add android    # sekali saja, membuat proyek Android
+npm run cap:sync       # build lalu salin ke proyek Android
 npx cap open android   # buka di Android Studio untuk build APK
+npx cap add ios / npx cap sync ios / npx cap open ios   # hanya di Mac (Xcode)
 ```
 
 ## Struktur Folder (ringkas)
@@ -48,14 +52,15 @@ npx cap open android   # buka di Android Studio untuk build APK
 ```
 src/
   app/            # routing, layout, provider
-  features/       # per fitur: lesson/, lab/, practice/, worked-example/, progress/, test/, settings/
-  components/     # komponen UI umum (Button, Card, HintPanel, MathText, CartesianPlane)
-  lib/math/       # LOGIKA MATEMATIKA MURNI (tanpa React) — gradien, persamaan, pemeriksa jawaban
-  lib/feedback/   # pencocokan miskonsepsi → pesan umpan balik
-  lib/db/         # Dexie: skema & repository
-  store/          # Zustand store
-content/          # materi & soal dalam JSON (sumber kebenaran konten)
-tests/            # E2E
+  features/       # home, onboarding, module, lesson, worked-example, practice, lab, progress, settings, research
+  components/     # komponen UI umum (Button, Card, HintPanel, MathText, CartesianPlane, Gari, Banana)
+  lib/math/       # LOGIKA MATEMATIKA MURNI (tanpa React) — pecahan, parser, garis, ekuivalensi
+  lib/feedback/   # pemeriksa jawaban + pencocokan miskonsepsi → pesan umpan balik
+  lib/content/    # skema Zod, loader (menolak grup research-posttest), tes validasi konten
+  lib/progress/   # ringkasan skor, petunjuk, miskonsepsi
+  lib/export/     # ekspor JSON/CSV
+  store/          # Zustand store (persist ke localStorage)
+content/          # modules/, bank/, glossary.json, misconceptions.json, research/rubric.json
 ```
 
 ## Aturan Kode
@@ -91,6 +96,8 @@ Aturan ini berasal dari temuan wawancara. Melanggarnya berarti menambah beban ko
 | Umpan balik salah harus spesifik (sebut langkah yang keliru), ramah, tanpa kata "bodoh"/"gagal" | IL03 |
 | Palet: latar netral + 1 warna aksen; hijau/merah hanya untuk status benar/salah dan **selalu disertai ikon + teks** | DS03, aksesibilitas |
 | Jangan menambahkan leaderboard, ranking, atau elemen kompetitif | menambah EL & kecemasan |
+| Maskot & ornamen hanya di layar yang diizinkan (`docs/04` §7.3); tidak ada dekorasi di Lab Garis dan area soal | DS03, *seductive details* |
+| Jangan memakai karakter/gambar berhak cipta (mis. Minions, karakter film/kartun); pakai maskot orisinal "Gari" | Hak cipta |
 | Bahasa sederhana untuk anak 13–15 tahun; istilah teknis diberi glosarium pop-up | EL01 |
 
 ## Privasi

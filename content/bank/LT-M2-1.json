@@ -1,0 +1,63 @@
+{
+  "id": "LT-M2-1",
+  "group": "learning",
+  "title": "Menggambar Garis y = 2x − 1",
+  "indicator": "employ",
+  "objectives": ["TP2", "TP3"],
+  "draft": true,
+  "context": "Diketahui persamaan garis $y = 2x - 1$. Lengkapi tabel nilai untuk x = −1, 0, 1, 2, 3, gambarlah garisnya, lalu periksa apakah titik (5, 9) terletak pada garis tersebut.",
+  "given": ["$y = 2x - 1$", "x = −1, 0, 1, 2, 3"],
+  "asked": ["Nilai y pada tabel", "Grafik garis", "Apakah (5, 9) pada garis?"],
+  "graph": {
+    "x": [-3, 6], "y": [-5, 10], "xStep": 1, "yStep": 1,
+    "points": [
+      { "x": -1, "y": -3 }, { "x": 0, "y": -1 }, { "x": 1, "y": 1 }, { "x": 2, "y": 3 }, { "x": 3, "y": 5 }
+    ],
+    "lines": [{ "m": "2", "c": "-1" }]
+  },
+  "steps": [
+    {
+      "stage": 1, "score": 1, "label": "Substitusi x = −1", "kind": "number",
+      "prompt": "Hitung $y = 2(-1) - 1$.", "answer": "-3",
+      "why": "$2 \\times (-1) = -2$, lalu $-2 - 1 = -3$.",
+      "misconceptions": [{ "value": "-1", "code": "M-OP-04" }, { "value": "1", "code": "M-OP-04" }, { "value": "-2", "code": "M-OP-02" }]
+    },
+    {
+      "stage": 2, "score": 1, "label": "Melengkapi tabel", "kind": "number",
+      "prompt": "Untuk $x = 3$: $y = 2(3) - 1$. Berapa y?", "answer": "5",
+      "why": "$2 \\times 3 = 6$, lalu $6 - 1 = 5$. Tabel lengkap: y = −3, −1, 1, 3, 5.",
+      "misconceptions": [{ "value": "4", "code": "M-OP-01" }, { "value": "6", "code": "M-OP-02" }]
+    },
+    {
+      "stage": 3, "score": 1, "label": "Pasangan titik", "kind": "choice",
+      "prompt": "Untuk $x = 0$, titik pada garis adalah…",
+      "options": ["(0, −1)", "(−1, 0)", "(0, 1)"],
+      "answer": 0,
+      "why": "$y = 2(0) - 1 = -1$, jadi titiknya (0, −1). Ini juga titik potong sumbu-y.",
+      "misconceptions": [{ "value": "1", "code": "M-KOOR-01" }, { "value": "2", "code": "M-OP-04" }]
+    },
+    {
+      "stage": 4, "score": 1, "label": "Menggambar titik", "kind": "plot",
+      "prompt": "Ketuk untuk menaruh titik (−1, −3), (0, −1), (1, 1), (2, 3), dan (3, 5).",
+      "answer": [[-1, -3], [0, -1], [1, 1], [2, 3], [3, 5]],
+      "graph": { "x": [-3, 6], "y": [-5, 10] },
+      "why": "Kelima titik segaris. Garis yang menghubungkannya adalah grafik $y = 2x - 1$."
+    },
+    {
+      "stage": 5, "score": 1, "label": "Memeriksa titik", "kind": "choice",
+      "prompt": "Apakah titik (5, 9) terletak pada garis $y = 2x - 1$?",
+      "options": ["Ya, karena $2(5) - 1 = 9$", "Tidak, karena $2(5) + 1 = 11$", "Tidak, karena $9 - 5 = 4$"],
+      "answer": 0,
+      "why": "Substitusi x = 5 menghasilkan y = 9, sama dengan titiknya. Jadi titik itu ada di garis.",
+      "misconceptions": [{ "value": "1", "code": "M-OP-04" }]
+    }
+  ],
+  "hints": [
+    "Ganti x dengan angka yang diminta, kalikan 2, lalu kurangi 1.",
+    "Hati-hati dengan bilangan negatif: $2 \\times (-1) = -2$.",
+    "Contoh: untuk $x = 2$, $y = 2(2) - 1 = 4 - 1 = 3$, jadi titiknya (2, 3)."
+  ],
+  "explanation": "Tabel: (−1, −3), (0, −1), (1, 1), (2, 3), (3, 5). Semua segaris, dan (5, 9) juga ada di garis $y = 2x - 1$.",
+  "sameConceptAs": ["BS-3"],
+  "sameConceptNote": "Garis ini sama dengan garis pada soal Persamaan Garis pada Peta (modul 5)."
+}

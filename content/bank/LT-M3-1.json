@@ -1,0 +1,63 @@
+{
+  "id": "LT-M3-1",
+  "group": "learning",
+  "title": "Arti Angka pada Tarif Parkir",
+  "indicator": "interpret",
+  "objectives": ["TP4"],
+  "draft": true,
+  "context": "Biaya parkir sebuah mal dinyatakan dengan persamaan $y = 3.000x + 2.000$, dengan x lama parkir (jam) dan y total biaya (rupiah).",
+  "given": ["$y = 3.000x + 2.000$", "x = lama parkir (jam)", "y = total biaya (rupiah)"],
+  "asked": ["Arti 3.000 dan 2.000", "Titik potong sumbu-y", "Tambahan biaya per jam"],
+  "graph": {
+    "x": [0, 6], "y": [0, 20000], "xStep": 1, "yStep": 4000,
+    "points": [{ "x": 0, "y": 2000, "label": "(0, 2.000)" }],
+    "lines": [{ "m": "3000", "c": "2000" }],
+    "triangle": { "x0": 2, "dx": 1 }
+  },
+  "steps": [
+    {
+      "stage": 1, "score": 1, "label": "Mengenali gradien", "kind": "number",
+      "prompt": "Pada $y = 3.000x + 2.000$, berapa gradiennya?", "answer": "3000",
+      "why": "Gradien adalah angka yang dikalikan dengan x, yaitu 3.000.",
+      "misconceptions": [{ "value": "2000", "code": "M-GRAD-02" }]
+    },
+    {
+      "stage": 2, "score": 1, "label": "Arti gradien", "kind": "choice",
+      "prompt": "Apa arti angka 3.000?",
+      "options": ["Biaya bertambah Rp3.000 setiap jam", "Biaya awal parkir", "Lama parkir paling lama"],
+      "answer": 0,
+      "why": "Gradien adalah perubahan y setiap x naik 1: setiap jam biaya naik Rp3.000.",
+      "misconceptions": [{ "value": "1", "code": "M-MODEL-01" }]
+    },
+    {
+      "stage": 3, "score": 1, "label": "Arti konstanta", "kind": "choice",
+      "prompt": "Apa arti angka 2.000?",
+      "options": ["Biaya awal, yaitu biaya saat x = 0", "Biaya setiap jam", "Biaya untuk parkir 2 jam"],
+      "answer": 0,
+      "why": "Konstanta adalah nilai y saat x = 0, yaitu biaya awal Rp2.000.",
+      "misconceptions": [{ "value": "1", "code": "M-MODEL-01" }, { "value": "2", "code": "M-GRAF-01" }]
+    },
+    {
+      "stage": 4, "score": 1, "label": "Titik potong sumbu-y", "kind": "choice",
+      "prompt": "Garis memotong sumbu-y di titik…",
+      "options": ["(0, 2.000)", "(2.000, 0)", "(0, 3.000)"],
+      "answer": 0,
+      "why": "Di sumbu-y nilai x = 0, sehingga $y = 2.000$. Titiknya (0, 2.000).",
+      "misconceptions": [{ "value": "1", "code": "M-KOOR-01" }, { "value": "2", "code": "M-GRAD-02" }]
+    },
+    {
+      "stage": 5, "score": 1, "label": "Tambahan 1 jam", "kind": "number",
+      "prompt": "Jika lama parkir bertambah 1 jam, biaya bertambah berapa?", "prefix": "Rp", "answer": "3000",
+      "why": "Tambahan setiap 1 jam sama dengan gradiennya, Rp3.000. Lihat segitiga \"maju 1, naik 3.000\" di grafik.",
+      "misconceptions": [{ "value": "5000", "code": "M-GRAD-02" }, { "value": "2000", "code": "M-GRAD-02" }]
+    }
+  ],
+  "hints": [
+    "Pada $y = mx + c$, m dikalikan dengan x dan c berdiri sendiri.",
+    "m = perubahan biaya setiap jam. c = biaya saat parkir 0 jam.",
+    "Contoh mirip (soal pemicu): pada $y = 2x + 1$, angka 2 adalah gradien dan angka 1 adalah konstanta, titik potongnya (0, 1)."
+  ],
+  "explanation": "3.000 = gradien = tambahan biaya per jam. 2.000 = konstanta = biaya awal, titik potong (0, 2.000).",
+  "sameConceptAs": ["BS-1"],
+  "sameConceptNote": "Arti m dan c ini dipakai lagi pada soal Sewa Sepeda (modul 6)."
+}
