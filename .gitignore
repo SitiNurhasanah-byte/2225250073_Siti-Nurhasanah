@@ -8,3 +8,6 @@ android/app/build/
 android/.gradle/
 *.keystore
 *.jks
+
+# Local Netlify folder
+.netlify

@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "lint": "tsc --noEmit",
     "validate:content": "vitest run src/lib/content",
-    "cap:sync": "npm run build && npx cap sync android"
+    "cap:sync": "npm run build && npx cap sync android",
+    "deploy": "npm run test && npm run build && netlify deploy --prod --dir=dist --no-build"
   },
   "dependencies": {
     "@capacitor/app": "^7.1.2",
@@ -33,6 +34,7 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.6.2",
+    "netlify-cli": "^27.17.0",
     "postcss": "^8.5.32",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3",
