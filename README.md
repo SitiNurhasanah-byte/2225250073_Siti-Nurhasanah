@@ -5,7 +5,8 @@
 > Dikembangkan dengan model **ADDIE**.
 
 **Pengembang:** Siti Nurhasanah (2225250073) — S1 Pendidikan Matematika
-**Status:** Tahap *Development* — versi MVP 0.1.0 (6 modul, 10 soal, Lab Garis, menu peneliti) sudah bisa dijalankan.
+**Status:** Tahap *Development* — versi MVP 0.1.0 (6 modul, 10 soal, Lab Garis, menu peneliti) sudah online di
+**[garisku.netlify.app](https://garisku.netlify.app)**.
 
 > "GarisKu" adalah nama kerja; silakan diganti.
 
@@ -26,11 +27,13 @@ npm run preview      # mencoba hasil build → http://localhost:4173
 ```
 
 ### Alamat web
+### Alamat web
 
-** garisku.netlify.app. **
+**https://sitinurhasanah-byte.github.io/2225250073_Siti-Nurhasanah/**
 
-Setiap `git push` ke branch `main` otomatis menjalankan tes, membangun, dan memperbarui alamat di atas
-(lihat tab **Actions** di GitHub). Di HP Android: buka alamat itu di Chrome → menu ⋮ → **Instal aplikasi**.
+Setiap `git push` ke branch `main` otomatis menjalankan tes, membangun, dan memperbarui aplikasi melalui GitHub Actions.
+
+Di HP Android: buka alamat tersebut di Chrome → menu ⋮ → **Instal aplikasi**.
 
 ### Satu kode untuk semua perangkat
 
