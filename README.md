@@ -27,7 +27,8 @@ npm run preview      # mencoba hasil build → http://localhost:4173
 
 ### Alamat web
 
-**https://sitinurhasanah-byte.github.io/2225250073_Siti-Nurhasanah/**
+**https://sitinurhasanah-byte.github.io/2225250073_Siti-Nurhasanah/** atau
+**garisku.netlify.app.**
 
 Setiap `git push` ke branch `main` otomatis menjalankan tes, membangun, dan memperbarui alamat di atas
 (lihat tab **Actions** di GitHub). Di HP Android: buka alamat itu di Chrome → menu ⋮ → **Instal aplikasi**.
