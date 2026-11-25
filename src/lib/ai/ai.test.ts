@@ -145,6 +145,30 @@ describe('penilaian pekerjaan siswa (kasus: Gari mengulang petunjuk padahal jawa
     expect(turns[2].text).toContain('BENAR (dinilai dari pekerjaan siswa di pesan sebelumnya');
   });
 
+  it('LANJUTAN (kasus Netlify): penalaran "masih kurang Rp5.000" tidak dinilai sebagai jawaban salah', () => {
+    const history = [
+      { role: 'student', text: work },
+      { role: 'gari', text: 'Hebat! Apakah Rp55.000 cukup untuk membeli buku seharga Rp60.000?' },
+    ];
+    const note = 'Angka di pesan siswa cocok dengan hasil yang sudah benar (55.000): 5.000 = selisih 60.000 dan 55.000.';
+    const req = valid({ ...dita, studentText: 'Belum cukup, masih kurang Rp5.000', history, assessment: { verdict: 'followup', note }, attempt: { wrongCount: 0, hintsUsed: 0 } });
+    expect(req.assessment?.verdict).toBe('followup');
+    const last = buildPrompt(req).turns[2].text;
+    expect(last).toContain('Penilaian aplikasi: LANJUTAN. Jawaban utama langkah ini sudah dinilai BENAR');
+    expect(last).toContain('TIDAK dibandingkan dengan kunci');
+    expect(last).toContain('5.000 = selisih 60.000 dan 55.000');
+    expect(last).not.toMatch(/SALAH|belum tepat|Tingkat bantuan/);
+    expect(SYSTEM_PROMPT).toContain('BUKAN jawaban pengganti');
+    expect(SYSTEM_PROMPT).toContain('beri penguatan positif');
+    const reply = 'Tepat! Rp55.000 masih kurang Rp5.000 dari harga buku Rp60.000. Jadi kapan uang Dita cukup?';
+    expect(filterReply(req, reply, '55000')).toEqual({ ok: true, reply });
+  });
+
+  it('LANJUTAN dengan baris keliru tetap menyebut letaknya', () => {
+    const { turns } = buildPrompt(valid({ ...dita, studentText: '60.000 − 55.000 = 4.000', assessment: { verdict: 'followup', errorAt: '60.000 − 55.000 = 4.000' } }));
+    expect(turns[0].text).toContain('Baris hitungan yang keliru di pesan ini: "60.000 − 55.000 = 4.000"');
+  });
+
   it('penyaring tidak mengganti konfirmasi atas angka yang ditulis siswa sendiri', () => {
     const reply = 'Hebat! $5.000 \\times 7 = 35.000$ lalu ditambah $20.000$, jadi Rp55.000 tepat. Apa artinya bagi Dita?';
     const req = valid({ ...dita, studentText: work });

@@ -15,7 +15,8 @@ export interface ChatTurn {
   local?: boolean;
 }
 
-export type WorkVerdict = 'correct' | 'wrong' | 'incomplete' | 'none';
+/** followup = jawaban utama sudah benar; pesan ini penalaran lanjutan dan tidak dibandingkan dengan kunci. */
+export type WorkVerdict = 'correct' | 'wrong' | 'incomplete' | 'none' | 'followup';
 
 /**
  * Hasil penilaian pekerjaan siswa oleh aplikasi (src/lib/feedback/assessWork.ts) terhadap kunci langkah.
@@ -85,7 +86,7 @@ export const LIMITS = {
 } as const;
 
 const MODES: MediatorMode[] = ['hint', 'evidence', 'journal'];
-const VERDICTS: WorkVerdict[] = ['correct', 'wrong', 'incomplete', 'none'];
+const VERDICTS: WorkVerdict[] = ['correct', 'wrong', 'incomplete', 'none', 'followup'];
 
 /**
  * Prompt sistem. Tahapan RMT diambil dari docs/11 §1 (ringkasan Kinard & Kozulin, 2008):
@@ -123,7 +124,8 @@ variabel (yang berubah) → yang ajeg/tetap → variabel bebas dan terikat → h
 
 ## Menanggapi pekerjaan siswa
 Aplikasi menilai pekerjaan yang ditulis siswa dengan kunci jawaban dan mengirim hasilnya sebagai "Penilaian aplikasi".
-Penilaian itu PASTI benar: jangan menghitung ulang lalu menyimpulkan sebaliknya, dan jangan menilai sendiri jika tidak ada penilaian.
+Penilaian itu PASTI benar: jangan menghitung ulang lalu menyimpulkan sebaliknya, dan jangan menilai sendiri jika tidak ada penilaian
+(kecuali LANJUTAN, lihat di bawah).
 - BENAR: beri apresiasi yang spesifik (sebut langkah hitungnya yang tepat), konfirmasi bahwa hasilnya tepat,
   lalu ajak siswa memaknai hasil itu dalam konteks soal (apa artinya bagi tokoh/situasi di soal) dengan satu pertanyaan.
   Ingatkan siswa menulis jawabannya di kotak jawaban agar bisa lanjut ke langkah berikutnya.
@@ -132,6 +134,11 @@ Penilaian itu PASTI benar: jangan menghitung ulang lalu menyimpulkan sebaliknya,
 - BELUM LENGKAP: sebut bagian yang sudah benar, lalu arahkan ke bagian yang masih kurang
   (bandingkan dengan yang ditanya pada langkah ini) dengan satu pertanyaan.
 - BELUM ADA JAWABAN: tanggapi pertanyaan siswa dan bimbing sesuai tingkat bantuan.
+- LANJUTAN: jawaban utama langkah ini sudah benar; siswa sedang menjawab pertanyaan lanjutanmu
+  (mis. membandingkan hasil dengan harga, memaknai hasil). Nilai penalarannya sendiri memakai fakta di soal dan hasil
+  yang sudah benar. Angka baru di pesannya (mis. kekurangan, sisa, selisih) BUKAN jawaban pengganti hasil utama.
+  Jika penalarannya tepat, beri penguatan positif yang spesifik dan jelaskan maknanya dalam konteks soal,
+  lalu satu pertanyaan reflektif atau ajakan ke langkah berikutnya. Jika ada yang keliru, tunjuk bagiannya tanpa memberi jawaban.
 Pakai riwayat percakapan: jangan mengulang petunjuk atau pertanyaan yang sudah kamu berikan.
 Jika siswa menanyakan hal yang sama lagi, beri sudut pandang lain atau bantuan satu tingkat lebih konkret.
 
@@ -280,6 +287,13 @@ function assessmentText(a: AssessmentInfo): string {
       ].filter(Boolean).join(' ');
     case 'none':
       return 'BELUM ADA JAWABAN yang bisa dinilai di pesan ini.';
+    case 'followup':
+      return [
+        'LANJUTAN. Jawaban utama langkah ini sudah dinilai BENAR di pesan siswa sebelumnya.',
+        'Pesan ini menjawab pertanyaan lanjutan/penalaran kontekstual, jadi TIDAK dibandingkan dengan kunci; nilai penalarannya dengan fakta di soal.',
+        a.errorAt ? `Baris hitungan yang keliru di pesan ini: "${a.errorAt}".` : '',
+        a.note ? `Catatan aplikasi: ${a.note}` : '',
+      ].filter(Boolean).join(' ');
   }
 }
 
@@ -302,8 +316,8 @@ export function buildPrompt(req: MediatorRequest): Prompt {
   if (req.mode === 'hint') {
     const assessment = req.assessment ?? { verdict: 'none' as const };
     status.push(`Penilaian aplikasi: ${assessmentText(assessment)}`);
-    // Jawaban sudah benar: tidak perlu tingkat bantuan atau jejak salah di kotak jawaban (beban ekstrinsik).
-    if (assessment.verdict !== 'correct') {
+    // Jawaban utama sudah benar: tidak perlu tingkat bantuan atau jejak salah di kotak jawaban (beban ekstrinsik).
+    if (assessment.verdict !== 'correct' && assessment.verdict !== 'followup') {
       status.push(`Tingkat bantuan: ${SUPPORT_TEXT[supportLevel(req.attempt, priorStudentTurns)]}`);
       if (req.attempt) {
         status.push(`Usaha siswa: ${req.attempt.wrongCount} kali belum tepat di kotak jawaban, ${req.attempt.hintsUsed} petunjuk dibuka.`);

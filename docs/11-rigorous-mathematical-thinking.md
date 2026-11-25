@@ -224,6 +224,9 @@ dan `cognitiveFunctions` di setiap langkah soal. Semua divalidasi oleh `npm run 
   hanya meminta konfirmasi, penilaian memakai pekerjaan siswa sebelumnya di percakapan yang sama.
   - BENAR → apresiasi spesifik, konfirmasi langkah, ajakan memaknai hasil dalam konteks soal, isi kotak jawaban.
   - SALAH → tunjuk letak keliru tanpa memberi jawaban. BELUM LENGKAP → akui bagian benar, arahkan ke yang kurang.
+  - LANJUTAN → jawaban utama sudah benar di percakapan, jadi pesan berikutnya (penalaran kontekstual, mis.
+    "masih kurang Rp5.000") tidak dibandingkan lagi dengan kunci. Aplikasi hanya mengecek baris hitungannya dan
+    mengenali angka turunan (mis. 5.000 = selisih 60.000 dan 55.000); Gari menilai penalarannya dengan fakta soal.
 - **Pengaman**:
   - kode uji `GARI_TEST_TOKEN` (header `X-Gari-Test-Token`) dicek di server;
   - daftar asal (origin) yang diizinkan;

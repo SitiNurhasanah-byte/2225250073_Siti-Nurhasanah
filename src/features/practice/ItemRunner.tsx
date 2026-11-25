@@ -132,7 +132,7 @@ export function ItemRunner({ item, steps, prefill, moduleId, label, onDone }: Pr
               stage={step.stage}
               secretAnswer={secretAnswerOf(step)}
               attempt={{ wrongCount: wrong, hintsUsed: hints, lastAnswer: lastWrong?.answer, diagnosis: lastWrong?.diagnosis }}
-              assess={(current, earlier) => assessForGari(step, current, earlier)}
+              assess={(current, earlier) => assessForGari(item, step, current, earlier)}
             />
           )}
           {module && result?.status === 'correct' && (

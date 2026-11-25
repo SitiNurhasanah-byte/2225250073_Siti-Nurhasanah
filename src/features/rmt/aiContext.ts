@@ -34,8 +34,8 @@ export function stepContext(
 }
 
 /** Penilaian pekerjaan siswa di chat terhadap kunci langkah; hanya hasilnya yang dikirim ke Gari AI. */
-export function assessForGari(step: Step, current: string, earlier: string[]): AssessmentInfo {
-  return assessConversation(step, current, earlier, content.misconceptions);
+export function assessForGari(item: Item, step: Step, current: string, earlier: string[]): AssessmentInfo {
+  return assessConversation(step, current, earlier, content.misconceptions, `${item.context}\n${step.prompt}`);
 }
 
 /** Kunci langkah untuk penyaring kebocoran di perangkat (tidak dikirim). */

@@ -9,7 +9,11 @@ import { areEquivalentLines } from '../math/equivalence';
 import type { Step } from '../content/schema';
 import { checkStep, type CheckResult, type MisconceptionCatalog } from './diagnose';
 
-export type WorkVerdict = 'correct' | 'wrong' | 'incomplete' | 'none';
+/**
+ * followup = jawaban utama langkah ini sudah benar di percakapan; pesan ini menjawab pertanyaan lanjutan
+ * (mis. "apakah Rp55.000 cukup untuk buku Rp60.000?"), jadi TIDAK dibandingkan lagi dengan kunci.
+ */
+export type WorkVerdict = 'correct' | 'wrong' | 'incomplete' | 'none' | 'followup';
 
 export interface WorkAssessment {
   verdict: WorkVerdict;
@@ -225,15 +229,57 @@ export function assessWork(step: Step, text: string, catalog: MisconceptionCatal
   return NONE;
 }
 
+const display = (f: Fraction) => f.toDisplay();
+
 /**
- * Menilai pesan terbaru; jika pesan itu hanya bertanya ("apakah jawabanku benar?"),
- * pakai pekerjaan siswa paling akhir di percakapan yang sama.
+ * Pesan lanjutan: angka baru di pesan siswa dicocokkan dengan selisih/jumlah antara hasil yang sudah benar
+ * dan angka di soal, mis. "5.000 = selisih 60.000 dan 55.000" (kekurangan uang, bukan jawaban pengganti).
  */
-export function assessConversation(step: Step, current: string, earlier: string[], catalog: MisconceptionCatalog): WorkAssessment {
-  const texts = [current, ...[...earlier].reverse()];
-  for (let i = 0; i < texts.length; i++) {
-    const result = assessWork(step, texts[i], catalog);
-    if (result.verdict !== 'none') return i === 0 ? result : { ...result, fromEarlier: true };
+export function relateToResult(text: string, result: Fraction, problemText: string): string | undefined {
+  const pool = collectNumbers(normalizeWork(problemText)).map((n) => n.value);
+  const found: string[] = [];
+  for (const n of collectNumbers(normalizeWork(text))) {
+    if (n.value.equals(result) || n.value.isZero()) continue;
+    const p = pool.find((v) => v.sub(result).equals(n.value) || result.sub(v).equals(n.value));
+    // Angka yang dikutip dari soal (mis. harga buku 60.000) bukan hasil penjumlahan siswa.
+    const quoted = pool.some((v) => v.equals(n.value));
+    const sum = quoted ? undefined : pool.find((v) => v.add(result).equals(n.value));
+    let line: string | undefined;
+    if (p) {
+      const [big, small] = p.sub(result).num > 0 ? [p, result] : [result, p];
+      line = `${display(n.value)} = selisih ${display(big)} dan ${display(small)}`;
+    } else if (sum) line = `${display(n.value)} = jumlah ${display(result)} dan ${display(sum)}`;
+    if (line && !found.includes(line)) found.push(line);
   }
-  return NONE;
+  if (!found.length) return undefined;
+  return `Angka di pesan siswa cocok dengan hasil yang sudah benar (${display(result)}): ${found.join('; ')}.`;
+}
+
+/**
+ * Menilai pesan terbaru dalam satu percakapan.
+ * - Jika jawaban utama sudah benar di pesan sebelumnya, pesan berikutnya adalah LANJUTAN: tidak dibandingkan
+ *   lagi dengan kunci (kecuali kembali memuat jawaban utama yang benar); baris hitungan yang keliru tetap ditandai.
+ * - Jika pesan itu hanya bertanya ("kenapa salah?"), pakai pekerjaan siswa paling akhir di percakapan.
+ * `problemText` (konteks soal) dipakai untuk mengenali angka turunan seperti kekurangan/selisih.
+ */
+export function assessConversation(
+  step: Step,
+  current: string,
+  earlier: string[],
+  catalog: MisconceptionCatalog,
+  problemText = '',
+): WorkAssessment {
+  const earlierResults = earlier.map((t) => assessWork(step, t, catalog));
+  const now = assessWork(step, current, catalog);
+
+  if (earlierResults.some((r) => r.verdict === 'correct')) {
+    if (now.verdict === 'correct') return now;
+    const key = step.kind === 'number' ? parseNumber(step.answer) : null;
+    const note = key ? relateToResult(current, key, problemText) : undefined;
+    return { verdict: 'followup', ...(now.errorAt ? { errorAt: now.errorAt } : {}), ...(note ? { note } : {}) };
+  }
+
+  if (now.verdict !== 'none') return now;
+  const lastEarlier = [...earlierResults].reverse().find((r) => r.verdict !== 'none');
+  return lastEarlier ? { ...lastEarlier, fromEarlier: true } : NONE;
 }
