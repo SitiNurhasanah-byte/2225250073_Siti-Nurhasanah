@@ -1,0 +1,77 @@
+[
+  {
+    "id": "garis-bilangan",
+    "name": "Garis bilangan",
+    "visual": "number-line",
+    "structure": "Garis lurus yang dibagi menjadi bagian-bagian sama panjang. Setiap tanda diberi bilangan berurutan, dengan 0 sebagai titik acuan.",
+    "function": "Untuk mengurutkan, membandingkan, dan mengukur jarak antarbilangan, termasuk bilangan negatif.",
+    "meaning": "Karena jaraknya sama, bergeser 3 tanda selalu berarti bertambah atau berkurang 3.",
+    "questions": ["Bagian apa saja yang membentuk garis bilangan?", "Mengapa jarak antartanda harus sama?", "Kapan kamu memakai garis bilangan?"],
+    "check": {
+      "prompt": "Pada garis bilangan, bilangan di sebelah kiri 0 adalah…",
+      "options": ["bilangan negatif, makin ke kiri makin kecil", "bilangan positif yang lebih besar", "tidak ada bilangan di kiri 0"],
+      "answer": 0,
+      "why": "Ke kanan nilainya bertambah, ke kiri berkurang. Karena itu bilangan di kiri 0 bernilai negatif."
+    }
+  },
+  {
+    "id": "bidang-cartesius",
+    "name": "Bidang Cartesius",
+    "visual": "plane",
+    "structure": "Dua garis bilangan yang berpotongan tegak lurus di (0, 0): sumbu-x mendatar dan sumbu-y tegak.",
+    "function": "Untuk memasangkan nilai x dengan nilai y, sehingga hubungan dua variabel terlihat sebagai titik dan garis.",
+    "meaning": "Dengan alat ini, persamaan (aljabar) dan gambar garis (geometri) menjadi satu bahasa.",
+    "questions": ["Dari dua alat apa bidang Cartesius dibuat?", "Mengapa letak titik ditulis dengan dua bilangan?", "Hubungan apa yang bisa kamu lihat dari sebuah garis?"],
+    "check": {
+      "prompt": "Bidang Cartesius dibentuk dari…",
+      "options": ["dua garis bilangan yang berpotongan tegak lurus", "satu garis bilangan yang panjang", "tabel dengan dua kolom"],
+      "answer": 0,
+      "why": "Sumbu-x dan sumbu-y adalah dua garis bilangan. Karena itu setiap titik punya dua bilangan: (x, y)."
+    }
+  },
+  {
+    "id": "tabel",
+    "name": "Tabel",
+    "visual": "table",
+    "structure": "Kolom dan baris. Judul kolom mengelompokkan data, sedangkan satu baris memasangkan nilai-nilai yang saling berhubungan.",
+    "function": "Untuk menata pasangan nilai x dan y, melihat apa yang ajeg dan apa yang berubah, dan menemukan aturannya.",
+    "meaning": "Dari baris ke baris kamu bisa melihat perubahan, misalnya setiap x naik 1, y naik 2.",
+    "questions": ["Apa tugas judul kolom?", "Apa arti satu baris pada tabel?", "Apa yang bisa kamu temukan dengan membandingkan baris-baris?"],
+    "check": {
+      "prompt": "Pada tabel nilai x dan y, satu baris menunjukkan…",
+      "options": ["satu pasangan nilai x dan y, yaitu satu titik", "semua nilai x saja", "judul tabel"],
+      "answer": 0,
+      "why": "Satu baris memasangkan satu nilai x dengan nilai y-nya. Pasangan itu adalah satu titik (x, y)."
+    }
+  },
+  {
+    "id": "persamaan",
+    "name": "Persamaan",
+    "visual": "equation",
+    "structure": "Dua ruas yang dihubungkan tanda \"=\": nilai di kiri sama dengan nilai di kanan. Pada $y = mx + c$, m dikalikan dengan x dan c berdiri sendiri.",
+    "function": "Untuk menuliskan aturan hubungan x dan y secara singkat dan tepat, lalu menghitung nilai yang belum diketahui.",
+    "meaning": "Satu persamaan mewakili semua titik pada garis, jadi tidak perlu menuliskan titiknya satu per satu.",
+    "questions": ["Apa arti tanda \"=\"?", "Bagian mana yang berubah dan bagian mana yang tetap?", "Bagaimana persamaan membantumu menghitung?"],
+    "check": {
+      "prompt": "Pada $y = 2x - 1$, bagian yang tetap (ajeg) untuk semua titik adalah…",
+      "options": ["aturannya: kalikan x dengan 2, lalu kurangi 1", "nilai x", "nilai y"],
+      "answer": 0,
+      "why": "Nilai x dan y berubah-ubah, tetapi aturan yang menghubungkannya selalu sama. Itulah hubungan fungsional."
+    }
+  },
+  {
+    "id": "bahasa-matematika",
+    "name": "Bahasa matematika",
+    "visual": "language",
+    "structure": "Simbol, istilah, dan aturan, misalnya kalikan dulu baru tambah, serta urutan (x, y).",
+    "function": "Untuk menyatakan pikiran matematis dengan tepat, menerjemahkan cerita menjadi model, dan memberi bukti logis.",
+    "meaning": "Bahasa yang presisi membantumu berpikir lebih jelas, dan berpikir jelas membuat bahasamu makin presisi.",
+    "questions": ["Kata apa dalam soal yang menjadi simbol?", "Mengapa urutan operasi penting?", "Bagaimana kamu membuktikan jawabanmu dengan kalimat?"],
+    "check": {
+      "prompt": "\"Biaya awal Rp5.000 dan Rp2.000 setiap jam\" dalam bahasa matematika adalah…",
+      "options": ["$y = 2.000x + 5.000$", "$y = 5.000x + 2.000$", "$y = 7.000x$"],
+      "answer": 0,
+      "why": "Yang bertambah setiap jam dikalikan dengan x (gradien). Biaya awal hanya sekali (konstanta)."
+    }
+  }
+]

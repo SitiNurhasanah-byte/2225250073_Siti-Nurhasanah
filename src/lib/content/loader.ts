@@ -1,7 +1,13 @@
 import glossaryRaw from '../../../content/glossary.json';
 import misconceptionsRaw from '../../../content/misconceptions.json';
 import rubricRaw from '../../../content/research/rubric.json';
+import functionsRaw from '../../../content/rmt/cognitive-functions.json';
+import toolsRaw from '../../../content/rmt/tools.json';
 import {
+  cognitiveFunctionSchema,
+  toolSchema,
+  type CognitiveFunction,
+  type Tool,
   glossarySchema,
   itemSchema,
   misconceptionCatalogSchema,
@@ -56,6 +62,10 @@ function buildContent() {
     glossary: glossarySchema.parse(glossaryRaw),
     misconceptions: misconceptionCatalogSchema.parse(misconceptionsRaw),
     rubric: rubricSchema.parse(rubricRaw),
+    cognitiveFunctions: new Map(
+      cognitiveFunctionSchema.array().parse(functionsRaw).map((f) => [f.id, f] as const),
+    ),
+    tools: new Map(toolSchema.array().parse(toolsRaw).map((t) => [t.id, t] as const)),
   };
 }
 
@@ -67,6 +77,14 @@ export function getModule(id: string | undefined): Module | undefined {
 
 export function getItem(id: string): Item | undefined {
   return content.items.get(id);
+}
+
+export function getFunction(id: string): CognitiveFunction | undefined {
+  return content.cognitiveFunctions.get(id);
+}
+
+export function getTool(id: string): Tool | undefined {
+  return content.tools.get(id);
 }
 
 export function nextModule(id: string): Module | undefined {

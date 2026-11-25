@@ -48,6 +48,37 @@ describe('struktur konten', () => {
   });
 });
 
+describe('konten RMT', () => {
+  it('ada 24 fungsi kognitif F01–F24 di 3 level', () => {
+    const ids = [...content.cognitiveFunctions.keys()].sort();
+    expect(ids).toEqual(Array.from({ length: 24 }, (_, i) => `F${String(i + 1).padStart(2, '0')}`));
+    expect(new Set([...content.cognitiveFunctions.values()].map((f) => f.level))).toEqual(new Set([1, 2, 3]));
+  });
+
+  it('kunci soal cek alat berada dalam pilihan', () => {
+    for (const tool of content.tools.values()) {
+      expect(tool.check.answer, tool.id).toBeLessThan(tool.check.options.length);
+    }
+  });
+
+  it('modul merujuk alat dan fungsi kognitif yang ada', () => {
+    for (const mod of content.modules) {
+      for (const t of mod.rmt.tools) expect(content.tools.get(t), `${mod.id} alat ${t}`).toBeDefined();
+      for (const f of mod.rmt.functions) expect(content.cognitiveFunctions.get(f), `${mod.id} ${f}`).toBeDefined();
+    }
+  });
+
+  it('setiap langkah soal diberi fungsi kognitif yang ada', () => {
+    for (const item of items) {
+      for (const step of item.steps) {
+        const label = `${item.id} tahap ${step.stage}`;
+        expect(step.cognitiveFunctions.length, label).toBeGreaterThan(0);
+        for (const f of step.cognitiveFunctions) expect(content.cognitiveFunctions.get(f), `${label} ${f}`).toBeDefined();
+      }
+    }
+  });
+});
+
 describe('kebenaran kunci jawaban', () => {
   it.each(items.map((i) => [i.id, i] as [string, Item]))('%s', (_id, item) => {
     expect(item.hints).toHaveLength(3);

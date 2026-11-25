@@ -35,6 +35,8 @@ const stepBase = {
   why: z.string(),
   selfExplain: z.boolean().optional(),
   misconceptions: z.array(misconceptionRef).default([]),
+  /** Fungsi kognitif RMT yang dilatih langkah ini (F01–F24, lihat docs/11). */
+  cognitiveFunctions: z.array(z.string().regex(/^F\d{2}$/)).default([]),
 };
 
 export const stepSchema = z.discriminatedUnion('kind', [
@@ -89,6 +91,38 @@ export const moduleSchema = z.object({
   example: itemRef,
   practice: z.array(itemRef).min(1),
   recap: z.array(z.string()).max(3),
+  /** Rancangan RMT modul: alat psikologis, jembatan bahasa sehari-hari, fungsi kognitif utama. */
+  rmt: z.object({
+    tools: z.array(z.string()).min(1),
+    bridge: z.string(),
+    functions: z.array(z.string().regex(/^F\d{2}$/)).min(1),
+  }),
+});
+
+export const cognitiveFunctionSchema = z.object({
+  id: z.string().regex(/^F\d{2}$/),
+  level: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+  name: z.string(),
+  definition: z.string(),
+  question: z.string(),
+});
+
+export const toolVisualSchema = z.enum(['number-line', 'plane', 'table', 'equation', 'language']);
+
+export const toolSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  visual: toolVisualSchema,
+  structure: z.string(),
+  function: z.string(),
+  meaning: z.string(),
+  questions: z.array(z.string()).min(1).max(3),
+  check: z.object({
+    prompt: z.string(),
+    options: z.array(z.string()).min(2),
+    answer: z.number().int().min(0),
+    why: z.string(),
+  }),
 });
 
 export const glossarySchema = z.record(z.string(), z.string());
@@ -116,6 +150,9 @@ export type Card = z.infer<typeof cardSchema>;
 export type Module = z.infer<typeof moduleSchema>;
 export type ItemRef = z.infer<typeof itemRef>;
 export type Rubric = z.infer<typeof rubricSchema>;
+export type CognitiveFunction = z.infer<typeof cognitiveFunctionSchema>;
+export type Tool = z.infer<typeof toolSchema>;
+export type ToolVisual = z.infer<typeof toolVisualSchema>;
 export type Indicator = Item['indicator'];
 
 export const indicatorLabel: Record<Indicator, string> = {
