@@ -1,7 +1,7 @@
 import type { ProgressState } from '../../store/useProgressStore';
 
-export const APP_VERSION = '0.1.0';
-export const SCHEMA_VERSION = 1;
+export const APP_VERSION = '0.2.0';
+export const SCHEMA_VERSION = 2;
 
 export function csvEscape(value: unknown): string {
   const text = value === undefined || value === null ? '' : String(value);
@@ -14,7 +14,7 @@ export function toCsv(header: string[], rows: unknown[][]): string {
 
 /** Semua data dalam satu file JSON (untuk arsip peneliti). */
 export function buildJson(state: ProgressState): string {
-  const { studentCode, className, modules, attempts, efforts, researchMode, pretestDoneAt, posttestDoneAt, researchScores } = state;
+  const { studentCode, className, modules, attempts, efforts, journals, toolChecks, aiLogs, researchMode, pretestDoneAt, posttestDoneAt, researchScores } = state;
   return JSON.stringify(
     {
       schemaVersion: SCHEMA_VERSION,
@@ -25,6 +25,8 @@ export function buildJson(state: ProgressState): string {
       modules,
       attempts,
       efforts,
+      rmt: { journals, toolChecks },
+      aiLogs,
       research: { researchMode, pretestDoneAt, posttestDoneAt, scores: researchScores },
     },
     null,
@@ -47,6 +49,20 @@ export function buildCsvFiles(state: ProgressState): Array<{ name: string; conte
     {
       name: `${prefix}-effort.csv`,
       content: toCsv(['studentCode', 'moduleId', 'score', 'timestamp'], state.efforts.map((e) => [code, e.moduleId, e.score, e.timestamp])),
+    },
+    {
+      name: `${prefix}-journal.csv`,
+      content: toCsv(
+        ['studentCode', 'moduleId', 'functions', 'explanation', 'toolId', 'toolReason', 'easiest', 'hardest', 'aiFeedback', 'timestamp'],
+        state.journals.map((j) => [code, j.moduleId, j.functions.join('|'), j.explanation, j.toolId, j.toolReason, j.easiest, j.hardest, j.aiFeedback, j.timestamp]),
+      ),
+    },
+    {
+      name: `${prefix}-ai.csv`,
+      content: toCsv(
+        ['studentCode', 'moduleId', 'itemId', 'stage', 'mode', 'question', 'reply', 'timestamp'],
+        state.aiLogs.map((l) => [code, l.moduleId, l.itemId, l.stage, l.mode, l.question, l.reply, l.timestamp]),
+      ),
     },
     {
       name: `${prefix}-research.csv`,

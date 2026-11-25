@@ -9,17 +9,21 @@ import { ItemRunner } from '../practice/ItemRunner';
 import { EffortScale } from '../progress/EffortScale';
 import { ModuleDone } from '../progress/ModuleDone';
 import { BananaPattern } from '../../components/Banana';
+import { ToolIntro } from '../rmt/ToolIntro';
+import { JournalPage } from '../rmt/JournalPage';
 
-const PHASES: Phase[] = ['kartu', 'contoh', 'latihan', 'usaha', 'selesai'];
+const PHASES: Phase[] = ['alat', 'kartu', 'contoh', 'latihan', 'jurnal', 'usaha', 'selesai'];
 const phaseTitle: Record<Phase, string> = {
+  alat: 'Mengenal alat berpikir',
   kartu: 'Materi',
   contoh: 'Contoh soal',
   latihan: 'Latihan',
+  jurnal: 'Jurnal berpikir',
   usaha: 'Usaha belajar',
   selesai: 'Rekap modul',
 };
 
-/** Alur modul: kartu → contoh → latihan → skala usaha → rekap (docs/02 §3). */
+/** Alur modul RMT: alat → kartu → contoh → latihan → jurnal → skala usaha → rekap (docs/11 §5). */
 export function ModulePage() {
   const { id, phase } = useParams<{ id: string; phase: Phase }>();
   const navigate = useNavigate();
@@ -46,7 +50,9 @@ export function ModulePage() {
   };
 
   let body;
-  if (phase === 'kartu') {
+  if (phase === 'alat') {
+    body = <ToolIntro module={module} onFinish={() => go('kartu')} />;
+  } else if (phase === 'kartu') {
     body = (
       <LessonCards
         module={module}
@@ -79,11 +85,13 @@ export function ModulePage() {
             window.scrollTo(0, 0);
           } else {
             updateModule(module.id, { practiceIndex: 0 });
-            go('usaha');
+            go('jurnal');
           }
         }}
       />
     );
+  } else if (phase === 'jurnal') {
+    body = <JournalPage module={module} onDone={() => go('usaha')} />;
   } else if (phase === 'usaha') {
     body = (
       <EffortScale

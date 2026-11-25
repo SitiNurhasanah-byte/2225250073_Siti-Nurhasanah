@@ -22,7 +22,7 @@ export function RecapPage() {
           <Card className="flex flex-col items-center gap-3 py-8 text-center">
             <Gari expression="calm" size={110} />
             <p>Belum ada pisang terkumpul. Yuk mulai dari M1!</p>
-            <ButtonLink to="/modul/M1/kartu">Mulai M1</ButtonLink>
+            <ButtonLink to="/modul/M1/alat">Mulai M1</ButtonLink>
           </Card>
         ) : (
           <>

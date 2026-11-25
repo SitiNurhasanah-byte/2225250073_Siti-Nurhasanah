@@ -2,7 +2,8 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import type { Indicator } from '../lib/content/schema';
 
-export type Phase = 'kartu' | 'contoh' | 'latihan' | 'usaha' | 'selesai';
+/** Alur modul RMT: alat → kartu → contoh → latihan → jurnal → usaha → selesai (docs/11 §5). */
+export type Phase = 'alat' | 'kartu' | 'contoh' | 'latihan' | 'jurnal' | 'usaha' | 'selesai';
 
 export interface ModuleProgress {
   phase: Phase;
@@ -33,6 +34,32 @@ export interface EffortRating {
   timestamp: string;
 }
 
+/** Jurnal refleksi RMT (docs/11 §3): metakognisi setelah latihan. */
+export interface JournalEntry {
+  moduleId: string;
+  functions: string[];
+  explanation: string;
+  toolId: string;
+  toolReason: string;
+  easiest: string;
+  hardest: string;
+  aiFeedback?: string;
+  timestamp: string;
+}
+
+export type AiMode = 'hint' | 'evidence' | 'journal';
+
+/** Catatan percakapan dengan Gari AI (tanpa identitas siswa). */
+export interface AiLog {
+  moduleId: string;
+  itemId?: string;
+  stage?: number;
+  mode: AiMode;
+  question: string;
+  reply: string;
+  timestamp: string;
+}
+
 export interface ResearchScore {
   test: 'pretest' | 'posttest';
   itemId: string;
@@ -48,6 +75,9 @@ export interface ProgressState {
   modules: Record<string, ModuleProgress>;
   attempts: Attempt[];
   efforts: EffortRating[];
+  journals: JournalEntry[];
+  toolChecks: Record<string, boolean>;
+  aiLogs: AiLog[];
   lastModuleId: string | null;
   researchMode: boolean;
   pretestDoneAt: string | null;
@@ -60,6 +90,9 @@ interface ProgressActions {
   updateModule: (id: string, patch: Partial<ModuleProgress>) => void;
   addAttempt: (attempt: Attempt) => void;
   addEffort: (moduleId: string, score: number) => void;
+  saveJournal: (entry: Omit<JournalEntry, 'timestamp'>) => void;
+  markToolChecked: (toolId: string, correct: boolean) => void;
+  addAiLog: (log: Omit<AiLog, 'timestamp'>) => void;
   setResearchMode: (on: boolean) => void;
   markTest: (test: 'pretest' | 'posttest', done: boolean) => void;
   saveResearchScore: (score: ResearchScore) => void;
@@ -69,7 +102,7 @@ interface ProgressActions {
 const now = () => new Date().toISOString();
 
 export const defaultModuleProgress: ModuleProgress = {
-  phase: 'kartu',
+  phase: 'alat',
   cardIndex: 0,
   practiceIndex: 0,
   completed: false,
@@ -82,6 +115,9 @@ const initialState: ProgressState = {
   modules: {},
   attempts: [],
   efforts: [],
+  journals: [],
+  toolChecks: {},
+  aiLogs: [],
   lastModuleId: null,
   researchMode: false,
   pretestDoneAt: null,
@@ -109,6 +145,13 @@ export const useProgressStore = create<ProgressState & ProgressActions>()(
       addAttempt: (attempt) => set((state) => ({ attempts: [...state.attempts, attempt] })),
       addEffort: (moduleId, score) =>
         set((state) => ({ efforts: [...state.efforts, { moduleId, score, timestamp: now() }] })),
+      saveJournal: (entry) =>
+        set((state) => ({
+          journals: [...state.journals.filter((j) => j.moduleId !== entry.moduleId), { ...entry, timestamp: now() }],
+        })),
+      markToolChecked: (toolId, correct) =>
+        set((state) => ({ toolChecks: { ...state.toolChecks, [toolId]: state.toolChecks[toolId] || correct } })),
+      addAiLog: (log) => set((state) => ({ aiLogs: [...state.aiLogs, { ...log, timestamp: now() }].slice(-200) })),
       setResearchMode: (on) => set({ researchMode: on }),
       markTest: (test, done) =>
         set(test === 'pretest' ? { pretestDoneAt: done ? now() : null } : { posttestDoneAt: done ? now() : null }),

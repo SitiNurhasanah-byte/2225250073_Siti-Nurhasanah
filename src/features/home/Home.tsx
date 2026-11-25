@@ -7,9 +7,11 @@ import { Gari } from '../../components/Gari';
 import { Banana, BananaPattern } from '../../components/Banana';
 
 const phaseLabel: Record<Phase, string> = {
+  alat: 'mengenal alat berpikir',
   kartu: 'materi',
   contoh: 'contoh soal',
   latihan: 'latihan',
+  jurnal: 'jurnal berpikir',
   usaha: 'skala usaha',
   selesai: 'rekap',
 };

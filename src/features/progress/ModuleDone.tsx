@@ -68,7 +68,7 @@ export function ModuleDone({ module }: { module: Module }) {
         <ButtonLink to="/" variant="secondary">
           Peta Belajar
         </ButtonLink>
-        {next && <ButtonLink to={`/modul/${next.id}/kartu`}>Lanjut ke {next.id} →</ButtonLink>}
+        {next && <ButtonLink to={`/modul/${next.id}/alat`}>Lanjut ke {next.id} →</ButtonLink>}
       </div>
     </div>
   );
