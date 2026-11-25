@@ -2,7 +2,10 @@ import { useRef, useState } from 'react';
 import type { Item, Step } from '../../lib/content/schema';
 import { checkStep, type CheckResult, type StepInput } from '../../lib/feedback/diagnose';
 import { formatInput } from '../../lib/feedback/format';
-import { content } from '../../lib/content/loader';
+import { content, getModule } from '../../lib/content/loader';
+import { CognitiveChips } from '../../components/CognitiveChip';
+import { AskGari } from '../rmt/AskGari';
+import { secretAnswerOf, stepContext } from '../rmt/aiContext';
 import { useProgressStore } from '../../store/useProgressStore';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
@@ -32,7 +35,9 @@ export function ItemRunner({ item, steps, prefill, moduleId, label, onDone }: Pr
   const [result, setResult] = useState<CheckResult | null>(null);
   const [wrong, setWrong] = useState(0);
   const [hints, setHints] = useState(0);
+  const [lastWrong, setLastWrong] = useState<{ answer: string; diagnosis: string } | null>(null);
   const startedAt = useRef(Date.now());
+  const module = getModule(moduleId);
 
   const finished = index >= steps.length;
   const step = steps[index];
@@ -44,7 +49,10 @@ export function ItemRunner({ item, steps, prefill, moduleId, label, onDone }: Pr
     setResult(check);
     if (check.status === 'invalid') return;
     const correct = check.status === 'correct';
-    if (!correct) setWrong((w) => w + 1);
+    if (!correct) {
+      setWrong((w) => w + 1);
+      setLastWrong({ answer: formatInput(step, input), diagnosis: check.message });
+    }
     addAttempt({
       itemId: item.id,
       moduleId,
@@ -75,6 +83,7 @@ export function ItemRunner({ item, steps, prefill, moduleId, label, onDone }: Pr
     setIndex((i) => i + 1);
     setResult(null);
     setWrong(0);
+    setLastWrong(null);
     startedAt.current = Date.now();
   }
 
@@ -98,6 +107,7 @@ export function ItemRunner({ item, steps, prefill, moduleId, label, onDone }: Pr
           <p className="text-sm font-semibold text-muted">
             Tahap {step.stage} · {step.label} <span className="font-normal">({index + 1} dari {steps.length})</span>
           </p>
+          <CognitiveChips ids={step.cognitiveFunctions} />
           <p className="text-[1.05rem]">
             <MathText text={step.prompt} />
           </p>
@@ -114,6 +124,19 @@ export function ItemRunner({ item, steps, prefill, moduleId, label, onDone }: Pr
           )}
           {statuses[index] === 'revealed' && <SolvedStep step={step} status="revealed" />}
           {!resolved && <HintPanel hints={item.hints} used={hints} onReveal={() => setHints((h) => h + 1)} />}
+          {module && !resolved && (
+            <AskGari
+              context={stepContext(module, item, step, 'hint')}
+              moduleId={moduleId}
+              itemId={item.id}
+              stage={step.stage}
+              secretAnswer={secretAnswerOf(step)}
+              attempt={{ wrongCount: wrong, hintsUsed: hints, lastAnswer: lastWrong?.answer, diagnosis: lastWrong?.diagnosis }}
+            />
+          )}
+          {module && result?.status === 'correct' && (
+            <AskGari context={stepContext(module, item, step, 'evidence')} moduleId={moduleId} itemId={item.id} stage={step.stage} />
+          )}
           {!resolved && wrong >= 2 && (
             <Button variant="ghost" onClick={reveal}>
               Lihat pembahasan langkah ini

@@ -4,6 +4,10 @@
   command = "npm run build"
   publish = "dist"
 
+# Gari AI (Google Gemini, mode uji). Kunci disimpan sebagai env var GEMINI_API_KEY dan GARI_TEST_TOKEN di Netlify, bukan di kode.
+[functions]
+  directory = "netlify/functions"
+
 # Service worker & halaman utama selalu dicek ulang agar pembaruan cepat sampai ke siswa.
 [[headers]]
   for = "/sw.js"

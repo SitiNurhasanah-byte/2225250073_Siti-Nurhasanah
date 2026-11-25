@@ -31,7 +31,7 @@ function Choice<T extends string>({ name, value, options, onChange }: { name: st
 /** L11 Pengaturan & Ekspor (F11). */
 export function SettingsPage() {
   const progress = useProgressStore();
-  const { fontScale, theme, setFontScale, setTheme } = useSettingsStore();
+  const { fontScale, theme, aiEnabled, aiTestToken, setFontScale, setTheme, setAiEnabled, setAiTestToken } = useSettingsStore();
   const [message, setMessage] = useState('');
   const [confirmReset, setConfirmReset] = useState(false);
 
@@ -41,7 +41,7 @@ export function SettingsPage() {
   }
   async function exportCsv() {
     for (const file of buildCsvFiles(progress)) await saveFile(file.name, file.content, 'text/csv');
-    setMessage('Tiga file CSV (attempts, effort, research) disimpan.');
+    setMessage('Lima file CSV (attempts, effort, journal, ai, research) disimpan.');
   }
 
   return (
@@ -54,6 +54,26 @@ export function SettingsPage() {
         <Choice<FontScale> name="Ukuran huruf" value={fontScale} onChange={setFontScale} options={[['normal', 'Normal'], ['large', 'Besar']]} />
         <p className="text-sm text-muted">Tema</p>
         <Choice<Theme> name="Tema" value={theme} onChange={setTheme} options={[['system', 'Ikuti perangkat'], ['light', 'Terang'], ['dark', 'Gelap']]} />
+      </Card>
+
+      <Card className="space-y-3">
+        <h2 className="font-semibold">Gari AI (mode uji – khusus guru/peneliti)</h2>
+        <p className="text-sm text-muted">
+          Gari AI memakai Google Gemini. Ketentuan Gemini API tidak mengizinkan pemakaian oleh pengguna di bawah 18 tahun,
+          jadi fitur ini hanya untuk uji coba oleh orang dewasa. Teks yang diketik dikirim ke Google tanpa kode siswa
+          dan, pada versi gratis, dapat dipakai Google untuk mengembangkan layanannya.
+        </p>
+        <label className="block text-sm font-semibold" htmlFor="ai-token">Kode uji dari pengelola aplikasi</label>
+        <input
+          id="ai-token"
+          type="password"
+          autoComplete="off"
+          value={aiTestToken}
+          onChange={(e) => setAiTestToken(e.target.value)}
+          className="w-full rounded-card border border-border bg-surface p-2"
+        />
+        <Choice<'on' | 'off'> name="Gari AI" value={aiEnabled ? 'on' : 'off'} onChange={(v) => setAiEnabled(v === 'on')} options={[['on', 'Aktif'], ['off', 'Nonaktif']]} />
+        {aiEnabled && !aiTestToken && <p className="text-sm text-muted">ⓘ Isi kode uji agar tombol Gari AI muncul di latihan.</p>}
       </Card>
 
       <Card className="space-y-2">

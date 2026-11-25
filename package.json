@@ -1,17 +1,17 @@
 {
   "name": "garisku",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "GarisKu - aplikasi belajar Persamaan Garis Lurus untuk siswa SMP",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "dev:hp": "vite --host",
-    "build": "tsc --noEmit && vite build",
+    "build": "npm run lint && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "tsc --noEmit",
+    "lint": "tsc --noEmit && tsc --noEmit -p netlify",
     "validate:content": "vitest run src/lib/content",
     "cap:sync": "npm run build && npx cap sync android",
     "deploy": "npm run test && npm run build && netlify deploy --prod --dir=dist --no-build"
