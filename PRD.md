@@ -151,6 +151,18 @@ Prioritas: **M** = Must (MVP), **S** = Should, **C** = Could, **W** = Won't (v1)
 
 ### F12. Dasbor Guru & Sinkronisasi Cloud — **W** (v2)
 ### F13. Gamifikasi kompetitif (leaderboard) — **W** (bertentangan dengan prinsip ketenangan & dapat menambah EL)
+### F15. Model RMT: Mengenal Alat, Label Fungsi Kognitif, Jurnal Berpikir — **M**
+- Fase **Mengenal alat** di awal modul: kalimat jembatan dari bahasa sehari-hari, fungsi kognitif modul,
+  dan 1 alat per layar (struktur → fungsi → makna + soal cek).
+- Setiap langkah latihan diberi **label fungsi kognitif** (F01–F24) yang dapat diketuk.
+- **Jurnal berpikir** setelah latihan; diekspor sebagai `*-journal.csv`. Rincian di `docs/11`.
+
+### F16. Gari AI – Asisten Belajar Matematika (Google Gemini, mode uji) — **S**
+- *Tanya Gari* (pertanyaan pemandu, bantuan 3 tingkat, tanpa kunci), *Jelaskan alasanmu* (setelah benar), *Tanggapan jurnal*.
+- Riwayat percakapan per langkah selama sesi; memakai jejak usaha siswa (salah, petunjuk, diagnosis) untuk menakar bantuan.
+- **Mode uji khusus guru/peneliti dewasa** (kode uji di Pengaturan, dicek di server), karena ketentuan Gemini API
+  melarang pengguna di bawah 18 tahun. Butuh internet; kunci API hanya di server. Log diekspor sebagai `*-ai.csv`.
+
 ### F14. Penanda capaian "pisang terkumpul" (non-kompetitif) — **C**
 - Satu ikon pisang per modul selesai, hanya terlihat oleh siswa sendiri (lihat `docs/04` §7.2a).
 

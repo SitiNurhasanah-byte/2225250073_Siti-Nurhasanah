@@ -21,12 +21,31 @@ npm install          # sekali saja, memasang paket
 npm run dev          # mode pengembangan → buka http://localhost:5173
 npm run dev:hp       # sama, tapi bisa dibuka dari HP Android di Wi-Fi yang sama
                      # (buka alamat "Network: http://192.168.x.x:5173" yang muncul di terminal)
-npm run test         # 59 unit test (matematika, umpan balik, validasi konten)
+npm run test         # 74 unit test (matematika, umpan balik, konten & RMT, Gari AI)
 npm run build        # build produksi ke folder dist/
 npm run preview      # mencoba hasil build → http://localhost:4173
 ```
 
-### Alamat web
+### Mengaktifkan Gari AI (Google Gemini, mode uji)
+
+Gari AI – Asisten Belajar Matematika adalah mediator berbasis **Rigorous Mathematical Thinking**
+(lihat `docs/11`). Gari AI memakai Google Gemini API.
+
+Gari AI hanya berjalan dalam **mode uji** untuk guru/peneliti dewasa, karena ketentuan Gemini API melarang
+pengguna di bawah 18 tahun (lihat `docs/09` §2a). Kunci API **tidak** disimpan di kode, tetapi sebagai
+variabel rahasia di server Netlify:
+
+```bash
+npx netlify env:set GEMINI_API_KEY <kunci-dari-aistudio.google.com>
+npx netlify env:set GARI_TEST_TOKEN <kode-uji-buatan-anda>
+npm run deploy
+```
+
+Setelah itu, di aplikasi buka **Pengaturan → Gari AI (mode uji)**, isi kode uji, lalu pilih **Aktif**.
+Tanpa kunci, aplikasi tetap berjalan normal.
+
+Untuk mencoba fungsi AI di laptop: jalankan `npx netlify dev`, lalu buka http://localhost:8888.
+
 ### Alamat web
 
 **https://sitinurhasanah-byte.github.io/2225250073_Siti-Nurhasanah/**

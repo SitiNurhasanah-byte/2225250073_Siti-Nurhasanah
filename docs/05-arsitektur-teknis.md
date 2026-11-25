@@ -187,6 +187,22 @@ npx cap sync android && npx cap open android   # Build → Generate Signed APK/A
 - Skrip `validate:content` memvalidasi semua JSON terhadap skema Zod dan memastikan setiap `answer`
   benar menurut `lib/math` (konten tidak boleh salah kunci).
 
+## 8a. Gari AI (v0.2, Google Gemini)
+
+```
+Aplikasi (web/APK) ──POST /api/mediator──▶ Netlify Function (mediator.mts) ──▶ Gemini generateContent
+  + header X-Gari-Test-Token          │ cek origin, kode uji, batas teks & laju,   (gemini-3.5-flash-lite,
+       ▲  redaksi data pribadi,       │ prompt RMT + CLT (src/lib/ai/prompt.ts),    cadangan gemini-3.6-flash)
+       │  saring kunci di balasan     │ adaptor (src/lib/ai/gemini.ts)
+       └─────── { reply } ◀───────────┘ kunci: env GEMINI_API_KEY (tidak dibundel)
+```
+
+- Riwayat chat sesi: `src/store/useChatSessionStore.ts` (tidak permanen), maks. 6 giliran terakhir dikirim.
+
+- Klien: `src/lib/ai/mediator.ts`; alamat relatif di garisku.netlify.app / port 8888, selain itu alamat
+  absolut produksi (APK, GitHub Pages). Dapat ditimpa dengan `VITE_AI_ENDPOINT`.
+- Penyimpanan baru di store: `journals`, `toolChecks`, `aiLogs` (ekspor JSON skema v2 + CSV journal/ai).
+
 ## 9. Rencana v2 (di luar MVP)
 
 - Backend Supabase: akun guru, kelas, sinkronisasi data siswa, dasbor guru.

@@ -28,6 +28,32 @@
   mengaburkan wajah bila dipublikasikan.
 - Rekaman wawancara disimpan aman dan dihapus setelah penelitian selesai sesuai kesepakatan.
 
+## 2a. Risiko Gari AI (Google Gemini)
+
+> **Temuan penting** (diperiksa 25-11-2026; Gemini API Additional Terms, berlaku sejak 23-03-2026):
+> - *"You must be 18 years of age or older to use the APIs. You also will not use the Services as part of a
+>   website, application, or other service … that is directed towards or is likely to be accessed by
+>   individuals under the age of 18."*
+> - Pada versi gratis (*Unpaid Services*), Google memakai isi permintaan dan jawabannya untuk mengembangkan
+>   produk. Peninjau manusia dapat membacanya, dan Google meminta agar tidak mengirim informasi pribadi.
+>
+> **Keputusan:** Gari AI berjalan dalam **mode uji**.
+> - Bawaan nonaktif; server menolak permintaan tanpa kode `GARI_TEST_TOKEN`.
+> - Kode uji hanya diberikan kepada guru/peneliti dewasa.
+> - Pemakaian oleh siswa perlu dibahas dengan dosen pembimbing, dan memerlukan penyedia/ketentuan yang
+>   mengizinkan pengguna di bawah 18 tahun.
+
+| Risiko | Mitigasi |
+|---|---|
+| Melanggar ketentuan Gemini API (pengguna < 18 tahun) | Mode uji dengan kode yang dicek di server; bawaan nonaktif; kode tidak dibagikan ke siswa |
+| Teks terkirim ke layanan AI pihak ketiga dan dipakai Google (versi gratis) | Tanpa kode siswa; email/nomor HP disamarkan di perangkat dan server; peringatan "jangan tulis data pribadi"; hanya diuji oleh orang dewasa |
+| AI membocorkan jawaban sehingga mengurangi usaha berpikir | Prompt sistem melarang; kunci tidak dikirim pada mode *Tanya Gari*; penyaring kebocoran di perangkat |
+| AI memberi penjelasan keliru | Tanggapan singkat berupa pertanyaan; konten inti tetap dari JSON tervalidasi; guru meninjau `*-ai.csv` |
+| Penyalahgunaan endpoint / kuota gratis habis | Kode uji, daftar origin, batas teks, `maxOutputTokens` 512, batas laju per IP, model cadangan; **jangan menautkan billing** agar tetap di Free Tier tanpa biaya |
+| Kunci API bocor | Hanya di env var Netlify; tidak ada di repo, bundel, atau APK; ganti kunci jika dicurigai bocor |
+| Tidak ada internet | Gari AI menampilkan pesan ramah; petunjuk bertingkat tetap tersedia offline |
+| Bias perlakuan dalam penelitian | Catat apakah Gari AI aktif per kelas; pakai pengaturan yang sama untuk semua siswa satu kelompok |
+
 ## 3. Etika Penelitian
 
 - [ ] Surat izin penelitian dari kampus → sekolah

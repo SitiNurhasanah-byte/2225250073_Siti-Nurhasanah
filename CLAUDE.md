@@ -6,8 +6,9 @@ Baca file ini sebelum menulis kode apa pun.
 ## Konteks Proyek
 
 **GarisKu** adalah aplikasi belajar *Persamaan Garis Lurus* untuk siswa SMP (kelas VIII–IX),
-dijalankan sebagai **PWA di web** dan **APK Android via Capacitor**. Aplikasi dirancang berdasarkan
-**Cognitive Load Theory** dan hasil wawancara siswa (lihat `docs/01-analisis-kebutuhan.md`).
+dijalankan sebagai **PWA di web** dan **APK Android via Capacitor**. **Model pembelajarannya adalah
+Rigorous Mathematical Thinking (RMT)** (Kinard & Kozulin, 2008; lihat `docs/11-rigorous-mathematical-thinking.md`).
+Desain tampilannya mengikuti **Cognitive Load Theory** dan hasil wawancara siswa (lihat `docs/01-analisis-kebutuhan.md`).
 Pengembang adalah mahasiswa S1 Pendidikan Matematika; ini proyek pendidikan/skripsi, bukan produk komersial.
 
 Dokumen acuan (baca sesuai kebutuhan, jangan menebak):
@@ -17,6 +18,7 @@ Dokumen acuan (baca sesuai kebutuhan, jangan menebak):
 - Warna, tipografi, komponen → `docs/04-desain-ui-ux.md`
 - Arsitektur, struktur folder, model data → `docs/05-arsitektur-teknis.md`
 - Strategi pengujian → `docs/08-pengujian.md`
+- Model pembelajaran RMT, fungsi kognitif F01–F24, alat psikologis, Gari AI → `docs/11-rigorous-mathematical-thinking.md`
 
 ## Tech Stack
 
@@ -28,6 +30,9 @@ Dokumen acuan (baca sesuai kebutuhan, jangan menebak):
   Pindah ke IndexedDB (Dexie) hanya jika data melebihi ±5 MB.
 - **vite-plugin-pwa** untuk offline & instalasi (web, Windows, macOS, Android, iOS);
   **Capacitor 7** untuk build native Android dan iOS (`@capacitor/app` untuk tombol kembali Android)
+- **Gari AI**: Netlify Function `netlify/functions/mediator.mts` → Google Gemini API (`gemini-3.5-flash-lite`,
+  cadangan `gemini-3.6-flash`). Kunci hanya di env var server `GEMINI_API_KEY`; prompt di `src/lib/ai/prompt.ts`,
+  adaptor di `src/lib/ai/gemini.ts`. **Mode uji**: wajib kode `GARI_TEST_TOKEN` (ketentuan Gemini melarang pengguna < 18 th)
 - **Vitest** untuk unit test & validasi konten. Belum ada: ESLint, Testing Library, Playwright E2E
 - Routing memakai **HashRouter** agar jalan di hosting statis dan WebView Capacitor
 
@@ -41,6 +46,10 @@ npm run preview        # pratinjau build
 npm run test           # unit test (Vitest)
 npm run lint           # cek tipe (tsc --noEmit)
 npm run validate:content  # validasi skema + kebenaran kunci semua konten JSON
+npx netlify env:set GEMINI_API_KEY <kunci>    # sekali saja, kunci dari Google AI Studio
+npx netlify env:set GARI_TEST_TOKEN <kode-uji>  # kode uji guru/peneliti (mode uji Gari AI)
+npx netlify dev        # menjalankan aplikasi + fungsi Gari AI secara lokal (port 8888)
+npm run deploy         # tes, build, lalu unggah ke garisku.netlify.app (termasuk fungsi)
 npx cap add android    # sekali saja, membuat proyek Android
 npm run cap:sync       # build lalu salin ke proyek Android
 npx cap open android   # buka di Android Studio untuk build APK
@@ -52,15 +61,17 @@ npx cap add ios / npx cap sync ios / npx cap open ios   # hanya di Mac (Xcode)
 ```
 src/
   app/            # routing, layout, provider
-  features/       # home, onboarding, module, lesson, worked-example, practice, lab, progress, settings, research
+  features/       # home, onboarding, module, lesson, worked-example, practice, lab, progress, settings, research, rmt
   components/     # komponen UI umum (Button, Card, HintPanel, MathText, CartesianPlane, Gari, Banana)
   lib/math/       # LOGIKA MATEMATIKA MURNI (tanpa React) — pecahan, parser, garis, ekuivalensi
   lib/feedback/   # pemeriksa jawaban + pencocokan miskonsepsi → pesan umpan balik
+  lib/ai/         # prompt Gari AI (murni, dipakai server & klien) + klien mediator
   lib/content/    # skema Zod, loader (menolak grup research-posttest), tes validasi konten
   lib/progress/   # ringkasan skor, petunjuk, miskonsepsi
   lib/export/     # ekspor JSON/CSV
   store/          # Zustand store (persist ke localStorage)
-content/          # modules/, bank/, glossary.json, misconceptions.json, research/rubric.json
+content/          # modules/, bank/, rmt/, glossary.json, misconceptions.json, research/rubric.json
+netlify/functions/ # mediator.mts (proxy Gemini; kunci API via env var, bukan di kode)
 ```
 
 ## Aturan Kode
@@ -81,6 +92,11 @@ content/          # modules/, bank/, glossary.json, misconceptions.json, researc
    Soal bank memakai nilai rupiah, jadi `1.000` harus dibaca seribu.
 7. Jangan menambah dependensi baru tanpa alasan kuat; pertimbangkan ukuran bundel (NFR02 < 400 KB gzip).
 8. Semua fitur harus berfungsi **offline**. Jangan memanggil API eksternal pada alur belajar inti.
+   Satu-satunya pengecualian adalah **Gari AI**: opsional, lewat `/api/mediator` milik sendiri, bisa dimatikan,
+   dan selalu punya cadangan offline (petunjuk bertingkat). **Jangan pernah menaruh kunci API di kode klien
+   atau variabel `VITE_*`.**
+9. **Setiap langkah soal wajib punya `cognitiveFunctions`** (F01–F24) dan setiap modul wajib punya blok `rmt`
+   (`tools`, `bridge`, `functions`). Lihat `docs/11` §5.
 
 ## Aturan Pedagogis (WAJIB dipatuhi saat membuat UI/konten)
 
@@ -99,12 +115,18 @@ Aturan ini berasal dari temuan wawancara. Melanggarnya berarti menambah beban ko
 | Maskot & ornamen hanya di layar yang diizinkan (`docs/04` §7.3); tidak ada dekorasi di Lab Garis dan area soal | DS03, *seductive details* |
 | Jangan memakai karakter/gambar berhak cipta (mis. Minions, karakter film/kartun); pakai maskot orisinal "Gari" | Hak cipta |
 | Bahasa sederhana untuk anak 13–15 tahun; istilah teknis diberi glosarium pop-up | EL01 |
+| Alur modul RMT: alat → kartu → contoh → latihan → jurnal → usaha → selesai | RMT Fase I–III |
+| Gari AI tidak boleh memberi jawaban akhir; berperan sebagai mediator (pertanyaan, fungsi kognitif, alat) | RMT/MLE, GL02 |
 
 ## Privasi
 
 - Jangan pernah mengumpulkan nama lengkap, email, foto, lokasi, atau nomor HP siswa.
 - Identitas hanya **kode siswa** (mis. `S01`) yang diisi manual.
 - Tidak ada analitik pihak ketiga (Google Analytics, dsb.). Data hanya keluar melalui ekspor manual.
+- **Gari AI (Google Gemini) hanya mode uji untuk orang dewasa.** Ketentuan Gemini API melarang pemakaian di
+  aplikasi untuk pengguna < 18 tahun, dan versi gratisnya memakai teks untuk pengembangan produk Google.
+  Jangan membuatnya aktif bawaan untuk siswa dan jangan menghapus pemeriksaan `GARI_TEST_TOKEN` (`docs/09` §2a).
+  Teks dikirim tanpa kode siswa; email/nomor HP disamarkan di perangkat dan di server.
 
 ## Definisi Selesai (Definition of Done)
 
