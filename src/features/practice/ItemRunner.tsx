@@ -5,7 +5,7 @@ import { formatInput } from '../../lib/feedback/format';
 import { content, getModule } from '../../lib/content/loader';
 import { CognitiveChips } from '../../components/CognitiveChip';
 import { AskGari } from '../rmt/AskGari';
-import { secretAnswerOf, stepContext } from '../rmt/aiContext';
+import { assessForGari, secretAnswerOf, stepContext } from '../rmt/aiContext';
 import { useProgressStore } from '../../store/useProgressStore';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
@@ -132,6 +132,7 @@ export function ItemRunner({ item, steps, prefill, moduleId, label, onDone }: Pr
               stage={step.stage}
               secretAnswer={secretAnswerOf(step)}
               attempt={{ wrongCount: wrong, hintsUsed: hints, lastAnswer: lastWrong?.answer, diagnosis: lastWrong?.diagnosis }}
+              assess={(current, earlier) => assessForGari(step, current, earlier)}
             />
           )}
           {module && result?.status === 'correct' && (

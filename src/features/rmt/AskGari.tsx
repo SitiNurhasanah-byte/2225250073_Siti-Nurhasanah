@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { askMediator } from '../../lib/ai/mediator';
-import { redact, type MediatorRequest } from '../../lib/ai/prompt';
+import { redact, type AssessmentInfo, type MediatorRequest } from '../../lib/ai/prompt';
 import { useProgressStore } from '../../store/useProgressStore';
 import { threadKey, useChatSessionStore } from '../../store/useChatSessionStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { Button } from '../../components/Button';
 import { MathText } from '../../components/MathText';
 
-type Context = Omit<MediatorRequest, 'studentText' | 'history' | 'attempt'>;
+type Context = Omit<MediatorRequest, 'studentText' | 'history' | 'attempt' | 'assessment'>;
 
 const copy = {
   hint: {
@@ -41,6 +41,8 @@ interface Props {
   presetText?: string;
   /** Mode hint: jejak usaha siswa pada langkah ini. */
   attempt?: MediatorRequest['attempt'];
+  /** Mode hint: menilai pekerjaan siswa di perangkat (pesan sekarang + pesan siswa sebelumnya). */
+  assess?: (current: string, earlier: string[]) => AssessmentInfo;
   onReply?: (reply: string) => void;
 }
 
@@ -49,7 +51,7 @@ interface Props {
  * MODE UJI: hanya tampil jika guru/peneliti mengaktifkannya dan mengisi kode uji di Pengaturan.
  * Riwayat percakapan bertahan selama sesi belajar. Tanpa ilustrasi maskot (area soal, docs/04 §7.3).
  */
-export function AskGari({ context, moduleId, itemId, stage, secretAnswer, presetText, attempt, onReply }: Props) {
+export function AskGari({ context, moduleId, itemId, stage, secretAnswer, presetText, attempt, assess, onReply }: Props) {
   const aiEnabled = useSettingsStore((s) => s.aiEnabled);
   const testToken = useSettingsStore((s) => s.aiTestToken);
   const addAiLog = useProgressStore((s) => s.addAiLog);
@@ -74,7 +76,9 @@ export function AskGari({ context, moduleId, itemId, stage, secretAnswer, preset
     }
     setLoading(true);
     setError(null);
-    const result = await askMediator({ ...context, studentText, attempt, history: turns }, testToken, secretAnswer);
+    const earlier = turns.filter((t) => t.role === 'student').map((t) => t.text);
+    const assessment = context.mode === 'hint' ? assess?.(studentText, earlier) : undefined;
+    const result = await askMediator({ ...context, studentText, attempt, assessment, history: turns }, testToken, secretAnswer);
     setLoading(false);
     if (!result.ok) {
       setError(result.message);
@@ -82,7 +86,7 @@ export function AskGari({ context, moduleId, itemId, stage, secretAnswer, preset
     }
     append(key, [
       { role: 'student', text: redact(studentText) },
-      { role: 'gari', text: result.reply },
+      { role: 'gari', text: result.reply, ...(result.local ? { local: true } : {}) },
     ]);
     setText('');
     addAiLog({ moduleId, itemId, stage, mode: context.mode, question: redact(studentText), reply: result.reply });

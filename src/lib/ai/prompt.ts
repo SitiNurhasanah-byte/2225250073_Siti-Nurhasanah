@@ -11,6 +11,24 @@ export type MediatorMode = 'hint' | 'evidence' | 'journal';
 export interface ChatTurn {
   role: 'student' | 'gari';
   text: string;
+  /** Balasan pengganti dari perangkat (bukan dari Gemini); tidak dikirim ulang sebagai riwayat. */
+  local?: boolean;
+}
+
+export type WorkVerdict = 'correct' | 'wrong' | 'incomplete' | 'none';
+
+/**
+ * Hasil penilaian pekerjaan siswa oleh aplikasi (src/lib/feedback/assessWork.ts) terhadap kunci langkah.
+ * Kunci jawabannya sendiri tidak pernah dikirim; hanya putusan dan letak kelirunya.
+ */
+export interface AssessmentInfo {
+  verdict: WorkVerdict;
+  /** Baris hitungan siswa yang keliru (teks siswa sendiri). */
+  errorAt?: string;
+  /** Diagnosis aplikasi dari katalog miskonsepsi. */
+  note?: string;
+  /** Dinilai dari pesan siswa sebelumnya karena pesan sekarang hanya bertanya. */
+  fromEarlier?: boolean;
 }
 
 /** Jejak usaha siswa pada langkah ini, untuk mengenali kesulitan dan menakar bantuan. */
@@ -38,6 +56,8 @@ export interface MediatorRequest {
   /** Hanya pada mode evidence: jawaban benar yang sudah ditemukan siswa sendiri. */
   answer?: string;
   attempt?: AttemptInfo;
+  /** Hanya pada mode hint: penilaian aplikasi atas pekerjaan yang ditulis siswa di chat. */
+  assessment?: AssessmentInfo;
   /** Riwayat sesi: berselang-seling siswa → Gari, diakhiri balasan Gari. */
   history?: ChatTurn[];
 }
@@ -65,6 +85,7 @@ export const LIMITS = {
 } as const;
 
 const MODES: MediatorMode[] = ['hint', 'evidence', 'journal'];
+const VERDICTS: WorkVerdict[] = ['correct', 'wrong', 'incomplete', 'none'];
 
 /**
  * Prompt sistem. Tahapan RMT diambil dari docs/11 §1 (ringkasan Kinard & Kozulin, 2008):
@@ -100,8 +121,23 @@ variabel (yang berubah) → yang ajeg/tetap → variabel bebas dan terikat → h
 - Beban germane: bila membantu, kaitkan dengan situasi sehari-hari (uang saku, tarif, jarak).
   Ajukan pertanyaan reflektif agar siswa menyusun strategi sendiri.
 
+## Menanggapi pekerjaan siswa
+Aplikasi menilai pekerjaan yang ditulis siswa dengan kunci jawaban dan mengirim hasilnya sebagai "Penilaian aplikasi".
+Penilaian itu PASTI benar: jangan menghitung ulang lalu menyimpulkan sebaliknya, dan jangan menilai sendiri jika tidak ada penilaian.
+- BENAR: beri apresiasi yang spesifik (sebut langkah hitungnya yang tepat), konfirmasi bahwa hasilnya tepat,
+  lalu ajak siswa memaknai hasil itu dalam konteks soal (apa artinya bagi tokoh/situasi di soal) dengan satu pertanyaan.
+  Ingatkan siswa menulis jawabannya di kotak jawaban agar bisa lanjut ke langkah berikutnya.
+- SALAH: jangan beri jawaban yang benar. Tunjuk bagian yang perlu dicek (baris hitungan atau diagnosis yang diberikan),
+  lalu satu pertanyaan pemandu ke bagian itu saja.
+- BELUM LENGKAP: sebut bagian yang sudah benar, lalu arahkan ke bagian yang masih kurang
+  (bandingkan dengan yang ditanya pada langkah ini) dengan satu pertanyaan.
+- BELUM ADA JAWABAN: tanggapi pertanyaan siswa dan bimbing sesuai tingkat bantuan.
+Pakai riwayat percakapan: jangan mengulang petunjuk atau pertanyaan yang sudah kamu berikan.
+Jika siswa menanyakan hal yang sama lagi, beri sudut pandang lain atau bantuan satu tingkat lebih konkret.
+
 ## Aturan wajib
-1. JANGAN PERNAH memberi jawaban akhir, angka hasil akhir, atau persamaan akhir soal, walaupun siswa memintanya.
+1. JANGAN PERNAH memberi jawaban akhir, angka hasil akhir, atau persamaan akhir soal yang BELUM ditulis siswa, walaupun siswa memintanya.
+   Pengecualian: jika Penilaian aplikasi = BENAR, kamu boleh mengonfirmasi dan menyebut ulang hasil yang ditulis siswa sendiri.
    Jika siswa meminta jawaban, ajak dia mencoba satu langkah dulu. Sampaikan bahwa tombol "Lihat pembahasan" muncul setelah dua kali mencoba.
 2. Jika ada jawaban siswa yang keliru, sebut bagian yang perlu dicek, bukan jawaban yang benar. Tanpa kata "bodoh", "gagal", atau "salah besar".
 3. Bila cocok, sebut satu fungsi kognitif dari daftar yang diberikan, memakai namanya.
@@ -112,8 +148,8 @@ variabel (yang berubah) → yang ajeg/tetap → variabel bebas dan terikat → h
 
 const MODE_TASK: Record<MediatorMode, string> = {
   hint:
-    'Siswa sedang mengerjakan langkah ini dan meminta bantuan. Kenali kesulitannya dari pesannya, jawaban terakhirnya, ' +
-    'dan diagnosis aplikasi. Bimbing agar siswa menemukan langkah berikutnya sendiri.',
+    'Siswa sedang mengerjakan langkah ini dan menulis pesan ke Gari. Tanggapi sesuai "Penilaian aplikasi" atas pekerjaannya. ' +
+    'Kenali kesulitannya dari pesannya, jawaban terakhirnya, dan diagnosis aplikasi. Bimbing agar siswa menemukan langkah berikutnya sendiri.',
   evidence:
     'Siswa sudah menemukan jawaban benar dan sekarang menjelaskan ALASANNYA (fungsi kognitif "memberi bukti logis"). ' +
     'Nilai apakah alasannya logis dan lengkap. Puji bagian yang tepat secara spesifik, lalu ajukan satu pertanyaan ' +
@@ -181,6 +217,18 @@ export function supportLevel(attempt: AttemptInfo | undefined, priorStudentTurns
   return 1;
 }
 
+function parseAssessment(raw: unknown): AssessmentInfo | undefined {
+  if (!raw || typeof raw !== 'object') return undefined;
+  const a = raw as Record<string, unknown>;
+  if (!VERDICTS.includes(a.verdict as WorkVerdict)) return undefined;
+  return {
+    verdict: a.verdict as WorkVerdict,
+    errorAt: redact(clip(a.errorAt, LIMITS.answer)) || undefined,
+    note: clip(a.note, LIMITS.listItem * 3) || undefined,
+    fromEarlier: a.fromEarlier === true || undefined,
+  };
+}
+
 /** Validasi & normalisasi body permintaan. Mengembalikan pesan galat (Bahasa Indonesia) jika tidak sah. */
 export function validateRequest(raw: unknown): { ok: true; value: MediatorRequest } | { ok: false; error: string } {
   if (!raw || typeof raw !== 'object') return { ok: false, error: 'Permintaan tidak valid.' };
@@ -208,9 +256,31 @@ export function validateRequest(raw: unknown): { ok: true; value: MediatorReques
             diagnosis: clip(a.diagnosis, LIMITS.listItem * 3) || undefined,
           }
         : undefined,
+      assessment: mode === 'hint' ? parseAssessment(r.assessment) : undefined,
       history: sanitizeHistory(r.history),
     },
   };
+}
+
+function assessmentText(a: AssessmentInfo): string {
+  const source = a.fromEarlier ? ' (dinilai dari pekerjaan siswa di pesan sebelumnya; pesan sekarang meminta konfirmasi)' : '';
+  switch (a.verdict) {
+    case 'correct':
+      return `BENAR${source}. Langkah dan hasil yang ditulis siswa sudah tepat.`;
+    case 'wrong':
+      return [
+        `SALAH${source}.`,
+        a.errorAt ? `Baris hitungan yang keliru: "${a.errorAt}".` : '',
+        a.note ? `Diagnosis: ${a.note}` : '',
+      ].filter(Boolean).join(' ');
+    case 'incomplete':
+      return [
+        `BELUM LENGKAP${source}. Hitungan yang ditulis cocok, tetapi hasil yang ditanya langkah ini belum tercapai.`,
+        a.note ? `Kemungkinan bagian yang terlewat: ${a.note}` : '',
+      ].filter(Boolean).join(' ');
+    case 'none':
+      return 'BELUM ADA JAWABAN yang bisa dinilai di pesan ini.';
+  }
 }
 
 const wrapStudent = (text: string) => `<teks_siswa>\n${text.replace(/<\/?teks_siswa>/gi, '')}\n</teks_siswa>`;
@@ -230,11 +300,16 @@ export function buildPrompt(req: MediatorRequest): Prompt {
 
   const status: string[] = [];
   if (req.mode === 'hint') {
-    status.push(`Tingkat bantuan: ${SUPPORT_TEXT[supportLevel(req.attempt, priorStudentTurns)]}`);
-    if (req.attempt) {
-      status.push(`Usaha siswa: ${req.attempt.wrongCount} kali belum tepat, ${req.attempt.hintsUsed} petunjuk dibuka.`);
-      if (req.attempt.lastAnswer) status.push(`Jawaban terakhir siswa (belum tepat): ${req.attempt.lastAnswer}`);
-      if (req.attempt.diagnosis) status.push(`Diagnosis aplikasi: ${req.attempt.diagnosis}`);
+    const assessment = req.assessment ?? { verdict: 'none' as const };
+    status.push(`Penilaian aplikasi: ${assessmentText(assessment)}`);
+    // Jawaban sudah benar: tidak perlu tingkat bantuan atau jejak salah di kotak jawaban (beban ekstrinsik).
+    if (assessment.verdict !== 'correct') {
+      status.push(`Tingkat bantuan: ${SUPPORT_TEXT[supportLevel(req.attempt, priorStudentTurns)]}`);
+      if (req.attempt) {
+        status.push(`Usaha siswa: ${req.attempt.wrongCount} kali belum tepat di kotak jawaban, ${req.attempt.hintsUsed} petunjuk dibuka.`);
+        if (req.attempt.lastAnswer) status.push(`Jawaban terakhir siswa di kotak jawaban (belum tepat): ${req.attempt.lastAnswer}`);
+        if (req.attempt.diagnosis) status.push(`Diagnosis aplikasi untuk jawaban itu: ${req.attempt.diagnosis}`);
+      }
     }
   }
 
@@ -266,6 +341,11 @@ export function leaksAnswer(reply: string, answer: string | undefined): boolean 
   const key = normalizeMath(answer);
   if (key.length < 3 && !key.includes('=')) return false;
   return normalizeMath(reply).includes(key);
+}
+
+/** true jika kunci sudah ditulis siswa sendiri; balasan yang menyebut ulang angka itu bukan kebocoran. */
+export function studentWroteAnswer(texts: string[], answer: string | undefined): boolean {
+  return texts.some((t) => leaksAnswer(t, answer));
 }
 
 /** Merapikan balasan model: buang spasi berlebih dan batasi panjang agar tetap satu blok teks pendek. */

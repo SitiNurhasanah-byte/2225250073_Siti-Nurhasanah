@@ -12,7 +12,7 @@ import {
   type MediatorRequest,
 } from './prompt';
 import { buildGeminiBody, classifyGeminiError, DEFAULT_MODEL, geminiUrl, readGeminiReply, RETRY_WITH_FALLBACK, USER_ERRORS } from './gemini';
-import { resolveEndpoint } from './mediator';
+import { filterReply, historyForModel, resolveEndpoint, SAFE_HINT } from './mediator';
 
 const base = { mode: 'hint', topic: 'Menghitung Gradien', problem: 'A(2, 3), B(4, 7). Berapa gradiennya?', functions: ['F19 Membentuk hubungan fungsional satuan'], tools: ['Tabel'], studentText: 'Aku bingung mulai dari mana' };
 
@@ -105,8 +105,68 @@ describe('buildPrompt', () => {
     const { turns } = buildPrompt(req);
     expect(turns.map((t) => t.role)).toEqual(['user', 'model', 'user']);
     expect(turns[0].text).toContain('Soal/langkah');
-    expect(turns[2].text).toContain('Jawaban terakhir siswa (belum tepat): 1/2');
+    expect(turns[2].text).toContain('Jawaban terakhir siswa di kotak jawaban (belum tepat): 1/2');
     expect(turns[2].text).toContain('Tingkat bantuan: 2');
+  });
+});
+
+describe('penilaian pekerjaan siswa (kasus: Gari mengulang petunjuk padahal jawaban benar)', () => {
+  const dita = { ...base, topic: 'Soal cerita', problem: 'Langkah 2 (Tabungan setelah 7 hari): Hitung $y = 5.000(7) + 20.000$.' };
+  const work = '5.000 × 7 = 35.000\n35.000 + 20.000 = 55.000\nKesimpulan: jumlah tabungan Dita adalah Rp55.000.';
+
+  it('penilaian hanya diterima pada mode hint dan divalidasi', () => {
+    expect(valid({ ...dita, assessment: { verdict: 'correct' } }).assessment).toEqual({ verdict: 'correct', errorAt: undefined, note: undefined, fromEarlier: undefined });
+    expect(valid({ ...dita, assessment: { verdict: 'jawabannya 55000' } }).assessment).toBeUndefined();
+    expect(valid({ ...dita, mode: 'journal', assessment: { verdict: 'correct' } }).assessment).toBeUndefined();
+  });
+
+  it('BENAR: prompt meminta apresiasi & makna, tanpa tingkat bantuan / jejak salah', () => {
+    const { turns } = buildPrompt(valid({ ...dita, studentText: work, assessment: { verdict: 'correct' }, attempt: { wrongCount: 1, hintsUsed: 0, lastAnswer: '35.000' } }));
+    const last = turns[turns.length - 1].text;
+    expect(last).toContain('Penilaian aplikasi: BENAR');
+    expect(last).not.toContain('Tingkat bantuan');
+    expect(last).not.toContain('belum tepat');
+    expect(SYSTEM_PROMPT).toContain('memaknai hasil itu dalam konteks soal');
+    expect(SYSTEM_PROMPT).toContain('jangan mengulang petunjuk');
+  });
+
+  it('SALAH dan BELUM LENGKAP menyebut letak masalah, bukan kunci', () => {
+    const wrong = buildPrompt(valid({ ...dita, studentText: '5.000 × 7 = 30.000', assessment: { verdict: 'wrong', errorAt: '5.000 × 7 = 30.000' } }));
+    expect(wrong.turns[0].text).toContain('SALAH. Baris hitungan yang keliru: "5.000 × 7 = 30.000"');
+    expect(wrong.turns[0].text).toContain('Tingkat bantuan');
+    const incomplete = buildPrompt(valid({ ...dita, studentText: '5.000 × 7 = 35.000', assessment: { verdict: 'incomplete', note: 'Jangan lupa tabungan awal.' } }));
+    expect(incomplete.turns[0].text).toContain('BELUM LENGKAP');
+    expect(incomplete.turns[0].text).toContain('Jangan lupa tabungan awal.');
+    expect(incomplete.turns[0].text).not.toMatch(/55\.?000/);
+  });
+
+  it('pertanyaan konfirmasi ditandai dinilai dari pesan sebelumnya', () => {
+    const { turns } = buildPrompt(valid({ ...dita, studentText: 'Apakah jawabanku benar?', assessment: { verdict: 'correct', fromEarlier: true }, history: [{ role: 'student', text: work }, { role: 'gari', text: 'Bagus!' }] }));
+    expect(turns[2].text).toContain('BENAR (dinilai dari pekerjaan siswa di pesan sebelumnya');
+  });
+
+  it('penyaring tidak mengganti konfirmasi atas angka yang ditulis siswa sendiri', () => {
+    const reply = 'Hebat! $5.000 \\times 7 = 35.000$ lalu ditambah $20.000$, jadi Rp55.000 tepat. Apa artinya bagi Dita?';
+    const req = valid({ ...dita, studentText: work });
+    expect(filterReply(req, reply, '55000')).toEqual({ ok: true, reply });
+    const confirm = valid({ ...dita, studentText: 'Apakah jawabanku benar?', history: [{ role: 'student', text: work }, { role: 'gari', text: 'Coba cek.' }] });
+    expect(filterReply(confirm, reply, '55000')).toEqual({ ok: true, reply });
+  });
+
+  it('penyaring tetap mengganti balasan yang membocorkan kunci yang belum ditulis siswa', () => {
+    const req = valid({ ...dita, studentText: 'Aku bingung, berapa hasilnya?' });
+    expect(filterReply(req, 'Hasilnya Rp55.000.', '55000')).toEqual({ ok: true, reply: SAFE_HINT, local: true });
+  });
+
+  it('balasan pengganti lokal tidak dikirim ulang ke Gemini sebagai riwayat', () => {
+    const turns = [
+      { role: 'student' as const, text: 'berapa hasilnya?' },
+      { role: 'gari' as const, text: SAFE_HINT, local: true },
+      { role: 'student' as const, text: work },
+      { role: 'gari' as const, text: 'Bagus!' },
+    ];
+    expect(historyForModel(turns)).toEqual([{ role: 'student', text: work }, { role: 'gari', text: 'Bagus!' }]);
+    expect(historyForModel([{ role: 'gari', text: 'x' }])).toEqual([]);
   });
 });
 

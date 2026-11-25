@@ -1,7 +1,8 @@
 import type { Item, Module, Step } from '../../lib/content/schema';
-import { getFunction, getTool } from '../../lib/content/loader';
+import { content, getFunction, getTool } from '../../lib/content/loader';
 import { formatAnswer } from '../../lib/feedback/format';
-import type { MediatorMode, MediatorRequest } from '../../lib/ai/prompt';
+import { assessConversation } from '../../lib/feedback/assessWork';
+import type { AssessmentInfo, MediatorMode, MediatorRequest } from '../../lib/ai/prompt';
 
 export function functionNames(ids: string[]): string[] {
   return ids.map((id) => {
@@ -30,6 +31,11 @@ export function stepContext(
     tools: toolNames(module),
     answer: mode === 'evidence' ? formatAnswer(step) : undefined,
   };
+}
+
+/** Penilaian pekerjaan siswa di chat terhadap kunci langkah; hanya hasilnya yang dikirim ke Gari AI. */
+export function assessForGari(step: Step, current: string, earlier: string[]): AssessmentInfo {
+  return assessConversation(step, current, earlier, content.misconceptions);
 }
 
 /** Kunci langkah untuk penyaring kebocoran di perangkat (tidak dikirim). */

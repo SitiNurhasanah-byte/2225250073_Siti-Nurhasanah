@@ -216,7 +216,14 @@ dan `cognitiveFunctions` di setiap langkah soal. Semua divalidasi oleh `npm run 
 - **Prompt sistem** ada di `src/lib/ai/prompt.ts` dan disusun di server, jadi tidak bisa diubah dari peramban.
   Format Gemini (body, pembacaan balasan, pemetaan galat) ada di `src/lib/ai/gemini.ts`.
 - **Riwayat percakapan**: per langkah selama sesi (`useChatSessionStore`, tidak permanen). Enam giliran terakhir
-  dikirim sebagai giliran `user`/`model`.
+  dikirim sebagai giliran `user`/`model`. Balasan pengganti dari perangkat (lihat Pengaman) tidak dikirim ulang.
+- **Penilaian pekerjaan siswa** (`src/lib/feedback/assessWork.ts`, berjalan di perangkat): pekerjaan yang ditulis
+  siswa di chat dicocokkan dengan kunci langkah (hitungan per baris dan hasil akhir, format angka Indonesia).
+  Hasilnya `BENAR` / `SALAH` (beserta baris yang keliru atau diagnosis miskonsepsi) / `BELUM LENGKAP` /
+  `BELUM ADA JAWABAN` dikirim sebagai "Penilaian aplikasi"; kuncinya sendiri tidak dikirim. Jika pesan siswa
+  hanya meminta konfirmasi, penilaian memakai pekerjaan siswa sebelumnya di percakapan yang sama.
+  - BENAR → apresiasi spesifik, konfirmasi langkah, ajakan memaknai hasil dalam konteks soal, isi kotak jawaban.
+  - SALAH → tunjuk letak keliru tanpa memberi jawaban. BELUM LENGKAP → akui bagian benar, arahkan ke yang kurang.
 - **Pengaman**:
   - kode uji `GARI_TEST_TOKEN` (header `X-Gari-Test-Token`) dicek di server;
   - daftar asal (origin) yang diizinkan;
@@ -224,7 +231,8 @@ dan `cognitiveFunctions` di setiap langkah soal. Semua divalidasi oleh `npm run 
   - `maxOutputTokens` 512, *thinking* minimal, batas waktu 9 detik;
   - batas 20 permintaan per 10 menit per IP (upaya terbaik);
   - kunci jawaban tidak dikirim pada mode *Tanya Gari*;
-  - balasan yang memuat kunci diganti dengan pertanyaan umum di perangkat.
+  - balasan yang memuat kunci diganti dengan pertanyaan umum di perangkat, **kecuali** kunci itu sudah ditulis
+    siswa sendiri (konfirmasi, bukan kebocoran).
 - **Galat yang ditangani** (pesan ramah ke pengguna):
 
   | Kondisi | Status |
